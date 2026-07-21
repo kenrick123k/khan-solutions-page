@@ -150,7 +150,7 @@ export const en = {
       submit: 'Send Message',
       submitting: 'Sending...',
       success: 'Message sent! We\'ll get back to you within 24 hours.',
-      error: 'Something went wrong. Please email us directly at',
+      error: 'Something went wrong. Please email us directly at ',
     },
   },
   footer: {

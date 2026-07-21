@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'KHAN Solutions',
-  title: 'VETEK by KHAN Solutions — Veterinary Practice Management',
+  title: 'KHAN',
   description:
     'Multi-tenant veterinary practice management platform with multi-branch inventory, clinical records, cash register, real-time analytics, and role-based access control. Built for modern veterinary clinics.',
   url: 'https://khan-solutions.com',

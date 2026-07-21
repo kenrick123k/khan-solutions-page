@@ -150,7 +150,7 @@ export const es = {
       submit: 'Enviar Mensaje',
       submitting: 'Enviando...',
       success: '¡Mensaje enviado! Te responderemos dentro de 24 horas.',
-      error: 'Algo salió mal. Escríbenos directamente a',
+      error: 'Algo salió mal. Escríbenos directamente a ',
     },
   },
   footer: {
