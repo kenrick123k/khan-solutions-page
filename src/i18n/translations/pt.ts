@@ -150,7 +150,7 @@ export const pt = {
       submit: 'Enviar Mensagem',
       submitting: 'Enviando...',
       success: 'Mensagem enviada! Responderemos em até 24 horas.',
-      error: 'Algo deu errado. Envie um e-mail diretamente para',
+      error: 'Algo deu errado. Envie um e-mail diretamente para ',
     },
   },
   footer: {
