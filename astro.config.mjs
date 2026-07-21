@@ -8,6 +8,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  server: {
+    allowedHosts: ['khan-solutions.com'],
+  },
   build: {
     inlineStylesheets: 'auto',
   },
