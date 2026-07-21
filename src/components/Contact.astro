@@ -1,0 +1,181 @@
+---
+import { CONFIG } from '../lib/config';
+import { Icons } from '../lib/icons';
+
+const projectTypes = [
+  { value: 'DEMO', i18n: 'contact.form.projectTypes.DEMO', default: 'I want a demo' },
+  { value: 'PRICING', i18n: 'contact.form.projectTypes.PRICING', default: 'I need pricing info' },
+  { value: 'IMPLEMENTATION', i18n: 'contact.form.projectTypes.IMPLEMENTATION', default: 'I\'m ready to implement' },
+  { value: 'CONSULTING', i18n: 'contact.form.projectTypes.CONSULTING', default: 'I need consulting' },
+  { value: 'SUPPORT', i18n: 'contact.form.projectTypes.SUPPORT', default: 'I need support' },
+  { value: 'OTHER', i18n: 'contact.form.projectTypes.OTHER', default: 'Something else' },
+];
+---
+
+<section id="contact" class="relative py-24 sm:py-32 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/6 top-0 right-0" />
+
+  <div class="relative z-10 mx-auto max-w-2xl">
+    <div class="text-center mb-12">
+      <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+        <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+        <span data-i18n="contact.badge">Let's Talk</span>
+      </div>
+      <h2 class="reveal-section text-3xl sm:text-5xl font-bold font-display mb-6">
+        <span data-i18n="contact.title">Your Clinic Deserves</span><br />
+        <span class="gradient-text" data-i18n="contact.titleAccent">the Best Tools</span>
+      </h2>
+      <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto" data-i18n="contact.subtitle">
+        Tell us about your clinic and we'll show you how VETEK transforms your daily operations.
+      </p>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="reveal-section card-glass rounded-2xl p-8 sm:p-10">
+      <form id="contact-form" class="space-y-5">
+        <!-- Name -->
+        <div>
+          <label for="contact-name" class="block text-sm font-medium text-khan-text-secondary mb-2" data-i18n="contact.form.name">Your Name</label>
+          <input id="contact-name" type="text" name="name" required minlength="2" maxlength="120"
+            data-i18n-placeholder="contact.form.namePlaceholder"
+            placeholder="Dr. Sarah Mitchell"
+            class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+        </div>
+
+        <!-- Email + Phone -->
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="contact-email" class="block text-sm font-medium text-khan-text-secondary mb-2" data-i18n="contact.form.email">Work Email</label>
+            <input id="contact-email" type="email" name="email" required maxlength="254"
+              data-i18n-placeholder="contact.form.emailPlaceholder"
+              placeholder="sarah@yourclinic.com"
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+          <div>
+            <label for="contact-phone" class="block text-sm font-medium text-khan-text-secondary mb-2" data-i18n="contact.form.phone">Phone (optional)</label>
+            <input id="contact-phone" type="tel" name="phone" maxlength="30"
+              data-i18n-placeholder="contact.form.phonePlaceholder"
+              placeholder="+1 555 0123"
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+        </div>
+
+        <!-- Company + Project Type -->
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="contact-company" class="block text-sm font-medium text-khan-text-secondary mb-2" data-i18n="contact.form.company">Clinic Name (optional)</label>
+            <input id="contact-company" type="text" name="company" maxlength="200"
+              data-i18n-placeholder="contact.form.companyPlaceholder"
+              placeholder="Happy Paws Veterinary"
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+          <div>
+            <label for="contact-project-type" class="block text-sm font-medium text-khan-text-secondary mb-2" data-i18n="contact.form.projectType">What do you need?</label>
+            <select id="contact-project-type" name="projectType"
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all appearance-none cursor-pointer">
+              {projectTypes.map((pt) => (
+                <option value={pt.value} data-i18n={pt.i18n}>{pt.default}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div>
+          <label for="contact-message" class="block text-sm font-medium text-khan-text-secondary mb-2" data-i18n="contact.form.message">Tell us about your needs</label>
+          <textarea id="contact-message" name="message" required minlength="10" maxlength="5000" rows="4"
+            data-i18n-placeholder="contact.form.messagePlaceholder"
+            placeholder="Describe your clinic, how many branches you have, and what challenges you want to solve..."
+            class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all resize-y"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="contact-submit-btn" class="btn-primary w-full justify-center text-base">
+          <span id="contact-submit-text" data-i18n="contact.form.submit">Send Message</span>
+          <span id="contact-submit-spinner" class="hidden"><Fragment set:html={Icons.spinner} /></span>
+        </button>
+
+        <!-- Status messages -->
+        <div id="contact-success" class="hidden p-4 rounded-xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent text-sm text-center" data-i18n="contact.form.success">
+          Message sent! We'll get back to you within 24 hours.
+        </div>
+        <div id="contact-error" class="hidden p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+          <span data-i18n="contact.form.error">Something went wrong. Please email us directly at</span>
+          <a href="mailto:{CONFIG.contact.email}" class="font-semibold underline">{CONFIG.contact.email}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('#contact .reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, delay: i * 0.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+
+  // ── Form submission ──
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('contact-submit-btn') as HTMLButtonElement;
+  const submitText = document.getElementById('contact-submit-text')!;
+  const submitSpinner = document.getElementById('contact-submit-spinner')!;
+  const successDiv = document.getElementById('contact-success')!;
+  const errorDiv = document.getElementById('contact-error')!;
+
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3100';
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitText.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+    successDiv.classList.add('hidden');
+    errorDiv.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const body: Record<string, unknown> = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone') || null,
+      company: formData.get('company') || null,
+      projectType: formData.get('projectType') || 'OTHER',
+      message: formData.get('message'),
+      language: document.documentElement.getAttribute('data-lang') || 'en',
+    };
+
+    try {
+      const res = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        successDiv.classList.remove('hidden');
+        form.reset();
+        successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        if (errData.fields) {
+          // Show first validation error
+          const firstField = Object.keys(errData.fields)[0];
+          const firstMsg = errData.fields[firstField]?.[0] || 'Validation error';
+          errorDiv.querySelector('span')!.textContent = `${firstMsg}. `;
+        }
+        errorDiv.classList.remove('hidden');
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch {
+      errorDiv.classList.remove('hidden');
+      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } finally {
+      submitBtn.disabled = false;
+      submitText.classList.remove('hidden');
+      submitSpinner.classList.add('hidden');
+    }
+  });
+</script>

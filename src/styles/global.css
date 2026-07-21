@@ -1,0 +1,212 @@
+@import 'tailwindcss';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/inter/800.css';
+@import '@fontsource/space-grotesk/400.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
+@import '@fontsource/space-grotesk/700.css';
+
+@theme {
+  --color-khan-bg: #060910;
+  --color-khan-bg-secondary: #0a1019;
+  --color-khan-bg-card: #0d1522;
+  --color-khan-bg-card-hover: #111b2b;
+  --color-khan-accent: #4FB286;
+  --color-khan-accent-light: #49C08B;
+  --color-khan-accent-lighter: #5DCCA0;
+  --color-khan-accent-dark: #3a8a63;
+  --color-khan-accent-glow: rgba(79, 178, 134, 0.15);
+  --color-khan-text: #f1f5f9;
+  --color-khan-text-secondary: #94a3b8;
+  --color-khan-text-muted: #64748b;
+  --color-khan-border: rgba(79, 178, 134, 0.12);
+  --color-khan-border-strong: rgba(79, 178, 134, 0.25);
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float 6s ease-in-out 2s infinite;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+  --animate-gradient-shift: gradient-shift 8s ease infinite;
+  --animate-reveal-up: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.6s ease-out forwards;
+  --animate-counter: counter 2s ease-out forwards;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(5px) rotate(-1deg); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(79, 178, 134, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(79, 178, 134, 0.25); }
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes counter {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+  background: #060910;
+  color: #f1f5f9;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #060910;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060910;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(79, 178, 134, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 178, 134, 0.5);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #4FB286, #49C08B, #5DCCA0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card glass effect */
+.card-glass {
+  background: rgba(13, 21, 34, 0.8);
+  border: 1px solid rgba(79, 178, 134, 0.12);
+  backdrop-filter: blur(20px);
+}
+
+.card-glass:hover {
+  border-color: rgba(79, 178, 134, 0.3);
+  background: rgba(17, 27, 43, 0.9);
+  box-shadow: 0 8px 32px rgba(79, 178, 134, 0.08);
+}
+
+/* Grid background pattern */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(79, 178, 134, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 178, 134, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Glow orb */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* Section reveal for GSAP */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Stagger children */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #4FB286, #3a8a63);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.875rem 2rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(79, 178, 134, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #4FB286;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.875rem 2rem;
+  border: 1.5px solid rgba(79, 178, 134, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-outline:hover {
+  border-color: #4FB286;
+  background: rgba(79, 178, 134, 0.08);
+  box-shadow: 0 0 20px rgba(79, 178, 134, 0.15);
+}
+
+/* Number counter style */
+.stat-number {
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,23 @@
+---
+import { CONFIG } from '../lib/config';
+const YEAR = new Date().getFullYear();
+---
+
+<footer class="relative py-12 px-6 border-t border-khan-border">
+  <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-3">
+      <img src="/minimal-logo.svg" alt="KHAN Solutions" class="h-8 w-auto opacity-70" width="32" height="32" />
+      <span class="text-sm font-semibold text-khan-text-muted font-display">
+        KHAN<span class="text-khan-accent">.</span> Solutions
+      </span>
+    </div>
+
+    <p class="text-sm text-khan-text-muted" data-i18n="footer.tagline">
+      Veterinary Practice Management Platform
+    </p>
+
+    <p class="text-xs text-khan-text-muted">
+      &copy; {YEAR} KHAN Solutions. <span data-i18n="footer.rights">All rights reserved.</span>
+    </p>
+  </div>
+</footer>

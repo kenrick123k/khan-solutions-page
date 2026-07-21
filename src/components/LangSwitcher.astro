@@ -1,0 +1,49 @@
+---
+// Language switcher: detects browser lang, allows manual switch.
+// Renders 3 buttons: EN | ES | PT
+---
+
+<div id="lang-switcher" class="flex items-center gap-1">
+  <button data-lang="en" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-accent bg-khan-accent/10" aria-label="English">EN</button>
+  <button data-lang="es" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-text-muted hover:text-khan-text" aria-label="Español">ES</button>
+  <button data-lang="pt" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-text-muted hover:text-khan-text" aria-label="Português">PT</button>
+</div>
+
+<script>
+  function setLang(lang: string) {
+    localStorage.setItem('lang', lang);
+    document.documentElement.setAttribute('data-lang', lang);
+    // Update active button
+    document.querySelectorAll('.lang-btn').forEach((btn) => {
+      const el = btn as HTMLElement;
+      const isActive = el.dataset.lang === lang;
+      el.classList.toggle('text-khan-accent', isActive);
+      el.classList.toggle('bg-khan-accent/10', isActive);
+      el.classList.toggle('text-khan-text-muted', !isActive);
+    });
+    // Dispatch event for other components to react
+    window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+  }
+
+  // Detect initial language
+  function detectLang(): string {
+    const params = new URLSearchParams(window.location.search);
+    const langParam = params.get('lang');
+    if (langParam && ['en', 'es', 'pt'].includes(langParam)) return langParam;
+    const stored = localStorage.getItem('lang');
+    if (stored && ['en', 'es', 'pt'].includes(stored)) return stored;
+    const browser = navigator.language.split('-')[0];
+    if (['en', 'es', 'pt'].includes(browser)) return browser;
+    return 'en';
+  }
+
+  const lang = detectLang();
+  setLang(lang);
+
+  // Click handlers
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setLang((btn as HTMLElement).dataset.lang || 'en');
+    });
+  });
+</script>

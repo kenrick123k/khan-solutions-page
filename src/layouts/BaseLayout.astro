@@ -1,0 +1,99 @@
+---
+import { CONFIG } from '../lib/config';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/minimal-logo.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>{CONFIG.site.title}</title>
+    <meta name="description" content={CONFIG.site.description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={CONFIG.site.url} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={CONFIG.site.url} />
+    <meta property="og:title" content={CONFIG.site.title} />
+    <meta property="og:description" content={CONFIG.site.description} />
+    <meta property="og:image" content={`${CONFIG.site.url}${CONFIG.site.ogImage}`} />
+    <meta property="og:site_name" content={CONFIG.site.name} />
+    <meta property="og:locale" content={CONFIG.site.locale} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={CONFIG.site.title} />
+    <meta name="twitter:description" content={CONFIG.site.description} />
+    <meta name="twitter:image" content={`${CONFIG.site.url}${CONFIG.site.ogImage}`} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'VETEK',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', description: 'Veterinary Practice Management Platform' },
+      provider: { '@type': 'Organization', name: CONFIG.site.name, email: CONFIG.contact.email, url: CONFIG.site.url },
+    })} />
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <slot name="head" />
+  </head>
+
+  <body class="bg-khan-bg text-khan-text antialiased">
+    <slot />
+
+    <!-- i18n: detects browser language and swaps [data-i18n] text content -->
+    <script>
+      const I18N_TRANSLATIONS = {
+        en: { nav: { features: "Features", modules: "Modules", contact: "Contact" }, hero: { badge: "Veterinary Practice Platform", headline: "Your Clinic Runs.", headlineAccent: "You Grow.", subheadline: "Inventory, patients, sales, and real-time insights — all connected across every branch. Spend less time managing, more time healing.", ctaPrimary: "Get a Demo", ctaSecondary: "See How It Works", scrollHint: "Scroll to explore" }, features: { label: "Everything You Need", title: "One Platform.", titleAccent: "Zero Limits.", subtitle: "Every tool built specifically for veterinary clinics. No generic software. No compromises.", items: [{ title: "Inventory That Thinks Ahead", description: "Real-time stock across every branch. Automatic expiration alerts. Never run out of what your patients need." }, { title: "Clinical Records, Simplified", description: "Consultations, surgeries, emergencies, vaccinations — organized and accessible in seconds. More time with patients, less with paperwork." }, { title: "Point of Sale, Perfected", description: "One-click sales that automatically update inventory and finances. Close your till in seconds, not hours." }, { title: "See Your Numbers Clearly", description: "Revenue, profit, margins, top products — updated live. Make decisions based on facts, not guesses." }, { title: "All Branches, One Pulse", description: "Every location connected in real time. What happens in one branch is visible in all — instantly." }, { title: "Your Data, Locked Down", description: "Bank-grade encryption. Role-based access. Every action audited. Your clinic's data deserves nothing less." }] }, modules: { label: "Core Modules", title: "Four Pillars.", titleAccent: "Complete Control.", subtitle: "Integrated modules that cover every aspect of your clinic. No gaps. No patchwork.", items: [{ title: "Inventory & Stock", tagline: "Always know what you have." }, { title: "Cash Register", tagline: "Close with confidence." }, { title: "Clinical Records", tagline: "Your patients, perfectly documented." }, { title: "Taxes & Compliance", tagline: "Tax complexity, handled." }] }, stats: { title: "Numbers That", titleAccent: "Deliver", items: [{ label: "Real-Time Performance" }, { label: "Integrated Modules" }, { label: "Uptime Commitment" }, { label: "Data Encryption" }] }, contact: { badge: "Let's Talk", title: "Your Clinic Deserves", titleAccent: "the Best Tools", subtitle: "Tell us about your clinic and we'll show you how VETEK transforms your daily operations.", form: { name: "Your Name", namePlaceholder: "Dr. Sarah Mitchell", email: "Work Email", emailPlaceholder: "sarah@yourclinic.com", phone: "Phone (optional)", phonePlaceholder: "+1 555 0123", company: "Clinic Name (optional)", companyPlaceholder: "Happy Paws Veterinary", projectType: "What do you need?", projectTypes: { DEMO: "I want a demo", PRICING: "I need pricing info", IMPLEMENTATION: "I'm ready to implement", CONSULTING: "I need consulting", SUPPORT: "I need support", OTHER: "Something else" }, message: "Tell us about your needs", messagePlaceholder: "Describe your clinic, how many branches you have, and what challenges you want to solve...", submit: "Send Message", submitting: "Sending...", success: "Message sent! We'll get back to you within 24 hours.", error: "Something went wrong. Please email us directly at" } }, footer: { tagline: "Veterinary Practice Management Platform", rights: "All rights reserved." } },
+        es: { nav: { features: "Funciones", modules: "Módulos", contact: "Contacto" }, hero: { badge: "Plataforma de Gestión Veterinaria", headline: "Tu Clínica Funciona.", headlineAccent: "Tú Creces.", subheadline: "Inventario, pacientes, ventas e información en tiempo real — todo conectado en cada sucursal. Menos tiempo gestionando, más tiempo curando.", ctaPrimary: "Solicita una Demo", ctaSecondary: "Descubre Cómo Funciona", scrollHint: "Desliza para explorar" }, features: { label: "Todo lo Que Necesitas", title: "Una Plataforma.", titleAccent: "Cero Límites.", subtitle: "Cada herramienta creada específicamente para clínicas veterinarias. Sin software genérico. Sin concesiones.", items: [{ title: "Inventario Que Se Adelanta", description: "Stock en tiempo real en cada sucursal. Alertas automáticas de caducidad. Nunca te quedes sin lo que tus pacientes necesitan." }, { title: "Historias Clínicas, Simplificadas", description: "Consultas, cirugías, emergencias, vacunas — organizadas y accesibles en segundos. Más tiempo con pacientes, menos con papeleo." }, { title: "Punto de Venta, Perfeccionado", description: "Ventas en un clic que actualizan inventario y finanzas automáticamente. Cierra tu caja en segundos, no en horas." }, { title: "Tus Números Claros", description: "Ingresos, ganancias, márgenes, productos estrella — actualizados en vivo. Decisiones basadas en hechos, no en suposiciones." }, { title: "Todas las Sucursales, Un Pulso", description: "Cada ubicación conectada en tiempo real. Lo que pasa en una sucursal se ve en todas — al instante." }, { title: "Tus Datos, Blindados", description: "Encriptación de grado bancario. Acceso por roles. Cada acción auditada. Los datos de tu clínica no merecen menos." }] }, modules: { label: "Módulos Principales", title: "Cuatro Pilares.", titleAccent: "Control Total.", subtitle: "Módulos integrados que cubren cada aspecto de tu clínica. Sin vacíos. Sin parches.", items: [{ title: "Inventario y Stock", tagline: "Siempre sabe lo que tienes." }, { title: "Caja Registradora", tagline: "Cierra con confianza." }, { title: "Historias Clínicas", tagline: "Tus pacientes, perfectamente documentados." }, { title: "Impuestos y Cumplimiento", tagline: "Complejidad fiscal, resuelta." }] }, stats: { title: "Números Que", titleAccent: "Hablan", items: [{ label: "Rendimiento en Tiempo Real" }, { label: "Módulos Integrados" }, { label: "Compromiso de Disponibilidad" }, { label: "Encriptación de Datos" }] }, contact: { badge: "Hablemos", title: "Tu Clínica Merece", titleAccent: "Las Mejores Herramientas", subtitle: "Cuéntanos sobre tu clínica y te mostraremos cómo VETEK transforma tus operaciones diarias.", form: { name: "Tu Nombre", namePlaceholder: "Dr. María García", email: "Correo de Trabajo", emailPlaceholder: "maria@tuclinica.com", phone: "Teléfono (opcional)", phonePlaceholder: "+52 555 0123", company: "Nombre de la Clínica (opcional)", companyPlaceholder: "Patitas Felices Veterinaria", projectType: "¿Qué necesitas?", projectTypes: { DEMO: "Quiero una demo", PRICING: "Necesito información de precios", IMPLEMENTATION: "Estoy listo para implementar", CONSULTING: "Necesito consultoría", SUPPORT: "Necesito soporte", OTHER: "Algo más" }, message: "Cuéntanos sobre tus necesidades", messagePlaceholder: "Describe tu clínica, cuántas sucursales tienes y qué desafíos quieres resolver...", submit: "Enviar Mensaje", submitting: "Enviando...", success: "¡Mensaje enviado! Te responderemos dentro de 24 horas.", error: "Algo salió mal. Escríbenos directamente a" } }, footer: { tagline: "Plataforma de Gestión de Clínicas Veterinarias", rights: "Todos los derechos reservados." } },
+        pt: { nav: { features: "Recursos", modules: "Módulos", contact: "Contato" }, hero: { badge: "Plataforma de Gestão Veterinária", headline: "Sua Clínica Funciona.", headlineAccent: "Você Cresce.", subheadline: "Inventário, pacientes, vendas e insights em tempo real — tudo conectado em cada filial. Menos tempo gerenciando, mais tempo curando.", ctaPrimary: "Solicite uma Demo", ctaSecondary: "Veja Como Funciona", scrollHint: "Role para explorar" }, features: { label: "Tudo Que Você Precisa", title: "Uma Plataforma.", titleAccent: "Zero Limites.", subtitle: "Cada ferramenta criada especificamente para clínicas veterinárias. Sem software genérico. Sem concessões.", items: [{ title: "Inventário Que Se Antecipa", description: "Estoque em tempo real em cada filial. Alertas automáticos de vencimento. Nunca fique sem o que seus pacientes precisam." }, { title: "Prontuários Clínicos, Simplificados", description: "Consultas, cirurgias, emergências, vacinas — organizadas e acessíveis em segundos. Mais tempo com pacientes, menos com papelada." }, { title: "Ponto de Venda, Perfeito", description: "Vendas em um clique que atualizam inventário e finanças automaticamente. Feche seu caixa em segundos, não em horas." }, { title: "Seus Números Claros", description: "Receita, lucro, margens, produtos principais — atualizados ao vivo. Decisões baseadas em fatos, não em suposições." }, { title: "Todas as Filiais, Um Pulso", description: "Cada local conectado em tempo real. O que acontece em uma filial é visível em todas — instantaneamente." }, { title: "Seus Dados, Blindados", description: "Criptografia de nível bancário. Acesso por funções. Cada ação auditada. Os dados da sua clínica merecem o melhor." }] }, modules: { label: "Módulos Principais", title: "Quatro Pilares.", titleAccent: "Controle Total.", subtitle: "Módulos integrados que cobrem cada aspecto da sua clínica. Sem lacunas. Sem remendos.", items: [{ title: "Inventário e Estoque", tagline: "Sempre saiba o que você tem." }, { title: "Caixa Registradora", tagline: "Feche com confiança." }, { title: "Prontuários Clínicos", tagline: "Seus pacientes, perfeitamente documentados." }, { title: "Impostos e Conformidade", tagline: "Complexidade fiscal, resolvida." }] }, stats: { title: "Números Que", titleAccent: "Entregam", items: [{ label: "Performance em Tempo Real" }, { label: "Módulos Integrados" }, { label: "Compromisso de Disponibilidade" }, { label: "Criptografia de Dados" }] }, contact: { badge: "Vamos Conversar", title: "Sua Clínica Merece", titleAccent: "As Melhores Ferramentas", subtitle: "Conte-nos sobre sua clínica e mostraremos como o VETEK transforma suas operações diárias.", form: { name: "Seu Nome", namePlaceholder: "Dr. João Silva", email: "E-mail Profissional", emailPlaceholder: "joao@suaclinica.com", phone: "Telefone (opcional)", phonePlaceholder: "+55 11 95555 0123", company: "Nome da Clínica (opcional)", companyPlaceholder: "Patas Felizes Veterinária", projectType: "O que você precisa?", projectTypes: { DEMO: "Quero uma demonstração", PRICING: "Preciso de informações de preços", IMPLEMENTATION: "Estou pronto para implementar", CONSULTING: "Preciso de consultoria", SUPPORT: "Preciso de suporte", OTHER: "Outra coisa" }, message: "Conte-nos sobre suas necessidades", messagePlaceholder: "Descreva sua clínica, quantas filiais você tem e quais desafios deseja resolver...", submit: "Enviar Mensagem", submitting: "Enviando...", success: "Mensagem enviada! Responderemos em até 24 horas.", error: "Algo deu errado. Envie um e-mail diretamente para" } }, footer: { tagline: "Plataforma de Gestão de Clínicas Veterinárias", rights: "Todos os direitos reservados." } }
+      };
+
+      function getNested(obj, path) {
+        return path.split('.').reduce((cur, key) => cur?.[key], obj);
+      }
+
+      function detectLang() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const p = params.get('lang');
+          if (p && I18N_TRANSLATIONS[p]) { localStorage.setItem('lang', p); return p; }
+          const s = localStorage.getItem('lang');
+          if (s && I18N_TRANSLATIONS[s]) return s;
+          const b = navigator.language.split('-')[0];
+          if (I18N_TRANSLATIONS[b]) return b;
+        } catch(e) {}
+        return 'en';
+      }
+
+      function applyLang(lang) {
+        const t = I18N_TRANSLATIONS[lang] || I18N_TRANSLATIONS.en;
+        document.documentElement.lang = lang;
+        document.documentElement.setAttribute('data-lang', lang);
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const val = getNested(t, el.getAttribute('data-i18n') || '');
+          if (val && typeof val === 'string') el.textContent = val;
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          const val = getNested(t, el.getAttribute('data-i18n-placeholder') || '');
+          if (val && typeof val === 'string') el.placeholder = val;
+        });
+      }
+
+      applyLang(detectLang());
+      window.addEventListener('langchange', e => applyLang(e.detail.lang));
+    </script>
+  </body>
+</html>

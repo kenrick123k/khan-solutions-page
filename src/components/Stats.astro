@@ -1,0 +1,60 @@
+---
+const stats = [
+  { value: 100, suffix: '%', decimals: 0, i18nLabel: 'stats.items.0.label', defaultLabel: 'Real-Time Performance' },
+  { value: 4, suffix: '', decimals: 0, i18nLabel: 'stats.items.1.label', defaultLabel: 'Integrated Modules' },
+  { value: 99.9, suffix: '%', decimals: 1, i18nLabel: 'stats.items.2.label', defaultLabel: 'Uptime Commitment' },
+  { value: 256, suffix: '-bit', decimals: 0, i18nLabel: 'stats.items.3.label', defaultLabel: 'Data Encryption' },
+];
+---
+
+<section id="stats" class="relative py-24 sm:py-32 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-khan-bg">
+    <div class="glow-orb w-[500px] h-[500px] bg-khan-accent/4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-4xl">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-5xl font-bold font-display">
+        <span data-i18n="stats.title">Numbers That</span>
+        <span class="gradient-text" data-i18n="stats.titleAccent"> Deliver</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+      {stats.map((stat) => (
+        <div class="reveal-section text-center">
+          <div class="stat-number text-4xl sm:text-5xl lg:text-6xl font-bold gradient-text mb-2">
+            <span data-target={stat.value} data-suffix={stat.suffix} data-decimals={stat.decimals}>
+              0{stat.suffix}
+            </span>
+          </div>
+          <p class="text-khan-text-secondary text-sm sm:text-base font-medium" data-i18n={stat.i18nLabel}>
+            {stat.defaultLabel}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('#stats [data-target]').forEach((el) => {
+    const target = parseFloat((el as HTMLElement).dataset.target || '0');
+    const suffix = (el as HTMLElement).dataset.suffix || '';
+    const decimals = parseInt((el as HTMLElement).dataset.decimals || '0');
+    gsap.fromTo(el, { textContent: `0${suffix}` }, {
+      textContent: `${target.toFixed(decimals)}${suffix}`, duration: 2, ease: 'power2.out',
+      scrollTrigger: { trigger: (el as HTMLElement).closest('.reveal-section')!, start: 'top 85%' },
+      snap: { textContent: decimals === 0 ? 1 : 0.1 },
+      onUpdate() { const val = parseFloat(this.targets()[0].textContent); if (!isNaN(val)) this.targets()[0].textContent = `${val.toFixed(decimals)}${suffix}`; },
+    });
+  });
+
+  document.querySelectorAll('#stats .reveal-section').forEach((el) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+</script>

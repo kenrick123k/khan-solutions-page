@@ -1,0 +1,68 @@
+---
+import LangSwitcher from './LangSwitcher.astro';
+---
+
+<nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background: transparent;">
+  <div class="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 group shrink-0" aria-label="KHAN Solutions Home">
+      <img src="/minimal-logo.svg" alt="KHAN" class="h-10 w-auto transition-transform duration-300 group-hover:scale-105" width="40" height="40" />
+      <span class="text-lg font-bold text-khan-text font-display tracking-tight hidden sm:inline">
+        KHAN<span class="text-khan-accent">.</span>
+      </span>
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex items-center gap-6">
+      <a href="#features" data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">Features</a>
+      <a href="#modules" data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">Modules</a>
+      <a href="#contact" data-i18n="nav.contact" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">Contact</a>
+      <LangSwitcher />
+    </div>
+
+    <!-- Mobile -->
+    <div class="flex md:hidden items-center gap-3">
+      <LangSwitcher />
+      <button id="mobile-menu-btn" class="flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+        <span class="block w-6 h-0.5 bg-khan-text transition-transform duration-300" />
+        <span class="block w-6 h-0.5 bg-khan-text transition-opacity duration-300" />
+        <span class="block w-6 h-0.5 bg-khan-text transition-transform duration-300" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-khan-bg/95 backdrop-blur-xl border-b border-khan-border">
+    <div class="px-6 py-4 flex flex-col gap-3">
+      <a href="#features" data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">Features</a>
+      <a href="#modules" data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">Modules</a>
+      <a href="#contact" data-i18n="nav.contact" class="btn-primary text-sm text-center mt-2">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const nav = document.getElementById('nav')!;
+  const mobileBtn = document.getElementById('mobile-menu-btn')!;
+  const mobileMenu = document.getElementById('mobile-menu')!;
+
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    if (currentScroll > 80) {
+      nav.style.background = 'rgba(6, 9, 16, 0.85)';
+      nav.style.backdropFilter = 'blur(16px)';
+      nav.style.borderBottom = '1px solid rgba(79, 178, 134, 0.1)';
+    } else {
+      nav.style.background = 'transparent';
+      nav.style.backdropFilter = 'none';
+      nav.style.borderBottom = 'none';
+    }
+    lastScroll = currentScroll;
+  }, { passive: true });
+
+  mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  mobileMenu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+  });
+</script>

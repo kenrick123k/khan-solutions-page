@@ -1,0 +1,109 @@
+---
+import { Icons } from '../lib/icons';
+
+const modules = [
+  {
+    title: 'Inventory & Stock',
+    tagline: 'Always know what you have.',
+    features: [
+      'Product catalog with smart categories',
+      'Batch tracking with auto-expiration alerts',
+      'Stock entries, exits & inter-branch transfers',
+      'Real-time levels across all locations',
+      'Automatic movement classification',
+      'Low-stock & expiry dashboard warnings',
+    ],
+  },
+  {
+    title: 'Cash Register',
+    tagline: 'Close with confidence.',
+    features: [
+      'Per-branch, per-shift till management',
+      'Sales auto-linked to inventory',
+      'Live accumulated amount tracking',
+      'Instant closing difference calculation',
+      'Complete session audit trail',
+      'Tax-inclusive movement recording',
+    ],
+  },
+  {
+    title: 'Clinical Records',
+    tagline: 'Your patients, perfectly documented.',
+    features: [
+      'Client & pet registry with photo profiles',
+      'SOAP consultations: diagnosis, treatment, plan',
+      'Emergency triage & stabilization logs',
+      'Surgery & anesthesia documentation',
+      'Hospitalization: admit to discharge',
+      'Vaccination schedules & lab result tracking',
+    ],
+  },
+  {
+    title: 'Taxes & Compliance',
+    tagline: 'Tax complexity, handled.',
+    features: [
+      'Configurable rates per tenant & country',
+      'Time-bound validity periods',
+      'Auto-calculated on every movement',
+      'Tax breakdowns in all financial reports',
+      'Historical rate snapshots for audits',
+      'Multi-country tax rule support',
+    ],
+  },
+];
+---
+
+<section id="modules" class="relative py-24 sm:py-32 px-6 bg-khan-bg-secondary/50">
+  <div class="mx-auto max-w-7xl">
+    <div class="text-center mb-16">
+      <span class="text-khan-accent text-sm font-semibold tracking-widest uppercase" data-i18n="modules.label">Core Modules</span>
+      <h2 class="text-3xl sm:text-5xl font-bold font-display mt-3 mb-4">
+        <span data-i18n="modules.title">Four Pillars.</span>
+        <span class="gradient-text" data-i18n="modules.titleAccent"> Complete Control.</span>
+      </h2>
+      <p class="text-khan-text-secondary text-lg max-w-2xl mx-auto" data-i18n="modules.subtitle">
+        Integrated modules that cover every aspect of your clinic. No gaps. No patchwork.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 lg:gap-8">
+      {modules.map((mod, i) => (
+        <div class="reveal-section card-glass rounded-2xl p-8 sm:p-10 transition-all duration-300 group">
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <h3 class="text-2xl font-bold font-display text-khan-text mb-1" data-i18n={`modules.items.${i}.title`}>
+                {mod.title}
+              </h3>
+              <p class="text-khan-accent font-medium text-sm" data-i18n={`modules.items.${i}.tagline`}>
+                {mod.tagline}
+              </p>
+            </div>
+            <div class="w-10 h-10 rounded-lg bg-khan-accent/10 flex items-center justify-center text-khan-accent group-hover:bg-khan-accent/20 transition-all shrink-0">
+              <Fragment set:html={Icons.chevronRight} />
+            </div>
+          </div>
+          <ul class="space-y-3">
+            {mod.features.map((feat, j) => (
+              <li class="flex items-start gap-3 text-khan-text-secondary">
+                <svg class="w-5 h-5 mt-0.5 shrink-0 text-khan-accent" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                <span>{feat}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('#modules .reveal-section').forEach((el) => {
+    gsap.fromTo(el, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+</script>

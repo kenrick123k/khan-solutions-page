@@ -1,0 +1,119 @@
+---
+import { Icons } from '../lib/icons';
+---
+
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Canvas particle background -->
+  <canvas id="particle-canvas" class="absolute inset-0 z-0"></canvas>
+
+  <!-- Ambient orbs -->
+  <div class="absolute inset-0 bg-grid" />
+  <div class="glow-orb w-[600px] h-[600px] bg-khan-accent/5 -top-40 -right-40 animate-float" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/8 bottom-20 -left-20 animate-float-delayed" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-glow-pulse" />
+
+  <!-- Floating shapes -->
+  <div class="absolute top-1/4 right-[15%] w-16 h-16 border border-khan-accent/10 rounded-lg rotate-12 animate-float opacity-40" />
+  <div class="absolute bottom-1/4 left-[10%] w-12 h-12 border border-khan-accent/15 rounded-full animate-float-delayed opacity-30" />
+  <div class="absolute top-[60%] right-[25%] w-8 h-8 bg-khan-accent/5 rounded rotate-45 animate-float opacity-50" />
+
+  <div class="relative z-10 mx-auto max-w-4xl px-6 text-center pt-20">
+    <!-- Badge -->
+    <div class="stagger-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+      <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+      <span data-i18n="hero.badge">Veterinary Practice Platform</span>
+    </div>
+
+    <!-- Logo -->
+    <div class="stagger-item mb-8">
+      <img src="/minimal-logo.svg" alt="VETEK" class="mx-auto h-24 w-auto animate-float drop-shadow-[0_0_40px_rgba(79,178,134,0.15)]" width="96" height="96" />
+    </div>
+
+    <!-- Headline -->
+    <h1 class="stagger-item text-5xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight mb-6">
+      <span class="text-khan-text" data-i18n="hero.headline">Your Clinic Runs.</span><br />
+      <span class="gradient-text" data-i18n="hero.headlineAccent">You Grow.</span>
+    </h1>
+
+    <!-- Subheadline -->
+    <p class="stagger-item text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed" data-i18n="hero.subheadline">
+      Inventory, patients, sales, and real-time insights — all connected across every branch. Spend less time managing, more time healing.
+    </p>
+
+    <!-- CTAs -->
+    <div class="stagger-item flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#contact" class="btn-primary text-base">
+        <span data-i18n="hero.ctaPrimary">Get a Demo</span>
+        <Fragment set:html={Icons.arrowRight} />
+      </a>
+      <a href="#features" class="btn-outline text-base">
+        <span data-i18n="hero.ctaSecondary">See How It Works</span>
+        <Fragment set:html={Icons.chevronDown} />
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="stagger-item mt-20 opacity-50">
+      <div class="w-6 h-10 mx-auto rounded-full border-2 border-khan-text-muted flex items-start justify-center p-1.5">
+        <div class="w-1.5 h-3 bg-khan-accent rounded-full animate-bounce" />
+      </div>
+      <p class="text-xs text-khan-text-muted mt-3" data-i18n="hero.scrollHint">Scroll to explore</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+
+  // ── Canvas Particles ──
+  const canvas = document.getElementById('particle-canvas') as HTMLCanvasElement | null;
+  if (canvas) {
+    const ctx = canvas.getContext('2d')!;
+    let particles: Particle[] = [];
+    let animId: number;
+    class Particle {
+      x = 0; y = 0; size = 0; speedX = 0; speedY = 0; opacity = 0; pulseSpeed = 0; pulseOffset = 0;
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.pulseSpeed = Math.random() * 0.02 + 0.005;
+        this.pulseOffset = Math.random() * Math.PI * 2;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < -10 || this.x > canvas.width + 10 || this.y < -10 || this.y > canvas.height + 10) this.reset();
+      }
+      draw() {
+        const pulse = Math.sin(Date.now() * this.pulseSpeed + this.pulseOffset) * 0.3 + 0.7;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(79,178,134,${this.opacity * pulse})`;
+        ctx.fill();
+      }
+    }
+    const resize = () => { canvas.width = canvas.parentElement!.offsetWidth; canvas.height = canvas.parentElement!.offsetHeight; };
+    const init = () => { resize(); particles = Array.from({ length: Math.min(80, Math.floor((canvas.width * canvas.height) / 12000)) }, () => new Particle()); };
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      for (let i = 0; i < particles.length; i++)
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = `rgba(79,178,134,${0.04 * (1 - dist / 120)})`; ctx.lineWidth = 1; ctx.stroke(); }
+        }
+      animId = requestAnimationFrame(animate);
+    };
+    window.addEventListener('resize', init);
+    init(); animate();
+  }
+
+  // ── GSAP Reveal ──
+  gsap.fromTo('.stagger-item', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, delay: 0.3, ease: 'power3.out' });
+</script>

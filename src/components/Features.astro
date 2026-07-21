@@ -1,0 +1,46 @@
+---
+import { Icons } from '../lib/icons';
+
+const ICON_KEYS = ['inventory', 'clinical', 'pos', 'analytics', 'realtime', 'security'] as const;
+---
+
+<section id="features" class="relative py-24 sm:py-32 px-6">
+  <div class="mx-auto max-w-7xl">
+    <div class="text-center mb-16 reveal-section">
+      <span class="text-khan-accent text-sm font-semibold tracking-widest uppercase" data-i18n="features.label">Everything You Need</span>
+      <h2 class="text-3xl sm:text-5xl font-bold font-display mt-3 mb-4">
+        <span data-i18n="features.title">One Platform.</span>
+        <span class="gradient-text" data-i18n="features.titleAccent"> Zero Limits.</span>
+      </h2>
+      <p class="text-khan-text-secondary text-lg max-w-2xl mx-auto" data-i18n="features.subtitle">
+        Every tool built specifically for veterinary clinics. No generic software. No compromises.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {ICON_KEYS.map((key, i) => (
+        <div class="reveal-section card-glass rounded-2xl p-8 transition-all duration-300 group cursor-default">
+          <div class="w-14 h-14 rounded-xl bg-khan-accent/10 border border-khan-accent/20 flex items-center justify-center text-khan-accent mb-6 group-hover:bg-khan-accent/15 group-hover:scale-110 transition-all duration-300">
+            <Fragment set:html={Icons[key]} />
+          </div>
+          <h3 class="text-xl font-bold font-display mb-3 text-khan-text group-hover:text-khan-accent-light transition-colors" data-i18n={`features.items.${i}.title`}>
+            {key === 'inventory' ? 'Inventory That Thinks Ahead' : key === 'clinical' ? 'Clinical Records, Simplified' : key === 'pos' ? 'Point of Sale, Perfected' : key === 'analytics' ? 'See Your Numbers Clearly' : key === 'realtime' ? 'All Branches, One Pulse' : 'Your Data, Locked Down'}
+          </h3>
+          <p class="text-khan-text-secondary leading-relaxed" data-i18n={`features.items.${i}.description`}>
+            {key === 'inventory' ? 'Real-time stock across every branch. Automatic expiration alerts. Never run out of what your patients need.' : key === 'clinical' ? 'Consultations, surgeries, emergencies, vaccinations — organized and accessible in seconds. More time with patients, less with paperwork.' : key === 'pos' ? 'One-click sales that automatically update inventory and finances. Close your till in seconds, not hours.' : key === 'analytics' ? 'Revenue, profit, margins, top products — updated live. Make decisions based on facts, not guesses.' : key === 'realtime' ? 'Every location connected in real time. What happens in one branch is visible in all — instantly.' : 'Bank-grade encryption. Role-based access. Every action audited. Your clinic\'s data deserves nothing less.'}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('#features .reveal-section').forEach((el) => {
+    gsap.fromTo(el, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+</script>
