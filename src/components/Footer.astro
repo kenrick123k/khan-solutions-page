@@ -1,5 +1,10 @@
 ---
 import { CONFIG } from '../lib/config';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+const locale = (Astro.currentLocale || 'en') as Locale;
+const text = t(locale);
 const YEAR = new Date().getFullYear();
 ---
 
@@ -13,11 +18,11 @@ const YEAR = new Date().getFullYear();
     </div>
 
     <p class="text-sm text-khan-text-muted" data-i18n="footer.tagline">
-      Veterinary Practice Management Platform
+      {text.footer.tagline}
     </p>
 
     <p class="text-xs text-khan-text-muted">
-      &copy; {YEAR} KHAN Solutions. <span data-i18n="footer.rights">All rights reserved.</span>
+      &copy; {YEAR} KHAN Solutions. <span data-i18n="footer.rights">{text.footer.rights}</span>
     </p>
   </div>
 </footer>

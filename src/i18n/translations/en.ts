@@ -1,4 +1,13 @@
 export const en = {
+  seo: {
+    title: 'VETEK by KHAN Solutions — Veterinary Practice Management Software',
+    description:
+      'Veterinary clinic management software for multi-branch practices. Inventory, clinical records, cash register, and real-time analytics — all in one platform.',
+    ogTitle: 'VETEK — Veterinary Practice Management Software',
+    ogDescription:
+      'All-in-one veterinary practice management platform with multi-branch inventory, clinical records, and real-time analytics.',
+    ogLocale: 'en_US',
+  },
   nav: {
     features: 'Features',
     modules: 'Modules',
@@ -9,7 +18,7 @@ export const en = {
     headline: 'Your Clinic Runs.',
     headlineAccent: 'You Grow.',
     subheadline:
-      'Inventory, patients, sales, and real-time insights — all connected across every branch. Spend less time managing, more time healing.',
+      'Inventory, patients, sales, and real-time insights — all connected across every branch of your clinic. Spend less time managing, more time growing your practice.',
     ctaPrimary: 'Get a Demo',
     ctaSecondary: 'See How It Works',
     scrollHint: 'Scroll to explore',

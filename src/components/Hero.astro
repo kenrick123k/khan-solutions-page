@@ -1,5 +1,10 @@
 ---
 import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+const locale = (Astro.currentLocale || 'en') as Locale;
+const text = t(locale);
 ---
 
 <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -21,7 +26,7 @@ import { Icons } from '../lib/icons';
     <!-- Badge -->
     <div class="stagger-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
       <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
-      <span data-i18n="hero.badge">Veterinary Practice Platform</span>
+      <span data-i18n="hero.badge">{text.hero.badge}</span>
     </div>
 
     <!-- Logo -->
@@ -31,23 +36,23 @@ import { Icons } from '../lib/icons';
 
     <!-- Headline -->
     <h1 class="stagger-item text-5xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight mb-6">
-      <span class="text-khan-text" data-i18n="hero.headline">Your Clinic Runs.</span><br />
-      <span class="gradient-text" data-i18n="hero.headlineAccent">You Grow.</span>
+      <span class="text-khan-text" data-i18n="hero.headline">{text.hero.headline}</span><br />
+      <span class="gradient-text" data-i18n="hero.headlineAccent">{text.hero.headlineAccent}</span>
     </h1>
 
     <!-- Subheadline -->
     <p class="stagger-item text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed" data-i18n="hero.subheadline">
-      Inventory, patients, sales, and real-time insights — all connected across every branch. Spend less time managing, more time healing.
+      {text.hero.subheadline}
     </p>
 
     <!-- CTAs -->
     <div class="stagger-item flex flex-col sm:flex-row items-center justify-center gap-4">
       <a href="#contact" class="btn-primary text-base">
-        <span data-i18n="hero.ctaPrimary">Get a Demo</span>
+        <span data-i18n="hero.ctaPrimary">{text.hero.ctaPrimary}</span>
         <Fragment set:html={Icons.arrowRight} />
       </a>
       <a href="#features" class="btn-outline text-base">
-        <span data-i18n="hero.ctaSecondary">See How It Works</span>
+        <span data-i18n="hero.ctaSecondary">{text.hero.ctaSecondary}</span>
         <Fragment set:html={Icons.chevronDown} />
       </a>
     </div>
@@ -57,7 +62,7 @@ import { Icons } from '../lib/icons';
       <div class="w-6 h-10 mx-auto rounded-full border-2 border-khan-text-muted flex items-start justify-center p-1.5">
         <div class="w-1.5 h-3 bg-khan-accent rounded-full animate-bounce" />
       </div>
-      <p class="text-xs text-khan-text-muted mt-3" data-i18n="hero.scrollHint">Scroll to explore</p>
+      <p class="text-xs text-khan-text-muted mt-3" data-i18n="hero.scrollHint">{text.hero.scrollHint}</p>
     </div>
   </div>
 </section>

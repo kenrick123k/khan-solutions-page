@@ -25,11 +25,11 @@
     window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
   }
 
-  // Detect initial language
+  // Detect initial language from URL path
   function detectLang(): string {
-    const params = new URLSearchParams(window.location.search);
-    const langParam = params.get('lang');
-    if (langParam && ['en', 'es', 'pt'].includes(langParam)) return langParam;
+    const path = window.location.pathname;
+    if (path.startsWith('/es/')) return 'es';
+    if (path.startsWith('/pt/')) return 'pt';
     const stored = localStorage.getItem('lang');
     if (stored && ['en', 'es', 'pt'].includes(stored)) return stored;
     const browser = navigator.language.split('-')[0];

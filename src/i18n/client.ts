@@ -1,13 +1,18 @@
-// Client-side i18n: populates [data-i18n] elements when language changes.
-// This runs after page load and on langchange events.
+// Client-side i18n: handles runtime language switching via LangSwitcher.
+// Server already rendered correct text — this only reacts to user-initiated
+// langchange events for in-place text swapping without page reload.
 
-import { translations, detectLocale, type Locale } from './index.js';
+import { translations } from './index.js';
+import type { Locale } from './index.js';
+
+function getNestedValue(obj: any, path: string): any {
+  return path.split('.').reduce((current, key) => current?.[key], obj);
+}
 
 function applyTranslations(locale: Locale) {
   const t = translations[locale];
   if (!t) return;
 
-  // Update all elements with data-i18n attribute
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const path = el.getAttribute('data-i18n');
     if (!path) return;
@@ -17,7 +22,6 @@ function applyTranslations(locale: Locale) {
     }
   });
 
-  // Update placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
     const path = el.getAttribute('data-i18n-placeholder');
     if (!path) return;
@@ -27,19 +31,10 @@ function applyTranslations(locale: Locale) {
     }
   });
 
-  // Update HTML lang attribute
   document.documentElement.lang = locale;
 }
 
-function getNestedValue(obj: any, path: string): any {
-  return path.split('.').reduce((current, key) => current?.[key], obj);
-}
-
-// Initialize
-const locale = detectLocale();
-applyTranslations(locale);
-
-// Listen for language changes from the switcher
+// React to language switcher events — server already rendered correct text
 window.addEventListener('langchange', ((e: CustomEvent) => {
   applyTranslations(e.detail.lang);
 }) as EventListener);

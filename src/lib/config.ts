@@ -6,7 +6,7 @@ export const CONFIG = {
     name: 'KHAN Solutions',
     title: 'VETEK by KHAN Solutions — Veterinary Practice Management',
     description:
-      'Multi-tenant veterinary practice management platform with multi-branch inventory, clinical records, cash register, real-time analytics, and role-based access control.',
+      'Veterinary clinic management software for multi-branch practices. Inventory, clinical records, cash register, and real-time analytics — all in one platform.',
     url: import.meta.env.SITE_URL || 'https://khan-solutions.com',
     locale: 'en_US',
     ogImage: '/og-image.png',

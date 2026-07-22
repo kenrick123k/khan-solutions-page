@@ -1,9 +1,15 @@
 ---
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+const locale = (Astro.currentLocale || 'en') as Locale;
+const text = t(locale);
+
 const stats = [
-  { value: 100, suffix: '%', decimals: 0, i18nLabel: 'stats.items.0.label', defaultLabel: 'Real-Time Performance' },
-  { value: 4, suffix: '', decimals: 0, i18nLabel: 'stats.items.1.label', defaultLabel: 'Integrated Modules' },
-  { value: 99.9, suffix: '%', decimals: 1, i18nLabel: 'stats.items.2.label', defaultLabel: 'Uptime Commitment' },
-  { value: 256, suffix: '-bit', decimals: 0, i18nLabel: 'stats.items.3.label', defaultLabel: 'Data Encryption' },
+  { value: 100, suffix: '%', decimals: 0, i18nLabel: 'stats.items.0.label', defaultLabel: text.stats.items[0].label },
+  { value: 4, suffix: '', decimals: 0, i18nLabel: 'stats.items.1.label', defaultLabel: text.stats.items[1].label },
+  { value: 99.9, suffix: '%', decimals: 1, i18nLabel: 'stats.items.2.label', defaultLabel: text.stats.items[2].label },
+  { value: 256, suffix: '-bit', decimals: 0, i18nLabel: 'stats.items.3.label', defaultLabel: text.stats.items[3].label },
 ];
 ---
 
@@ -15,8 +21,8 @@ const stats = [
   <div class="relative z-10 mx-auto max-w-4xl">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-5xl font-bold font-display">
-        <span data-i18n="stats.title">Numbers That</span>
-        <span class="gradient-text" data-i18n="stats.titleAccent"> Deliver</span>
+        <span data-i18n="stats.title">{text.stats.title}</span>
+        <span class="gradient-text" data-i18n="stats.titleAccent"> {text.stats.titleAccent}</span>
       </h2>
     </div>
 

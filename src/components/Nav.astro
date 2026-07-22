@@ -1,5 +1,10 @@
 ---
 import LangSwitcher from './LangSwitcher.astro';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+const locale = (Astro.currentLocale || 'en') as Locale;
+const text = t(locale);
 ---
 
 <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background: transparent;">
@@ -14,9 +19,9 @@ import LangSwitcher from './LangSwitcher.astro';
 
     <!-- Desktop Links -->
     <div class="hidden md:flex items-center gap-6">
-      <a href="#features" data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">Features</a>
-      <a href="#modules" data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">Modules</a>
-      <a href="#contact" data-i18n="nav.contact" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">Contact</a>
+      <a href="#features" data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.features}</a>
+      <a href="#modules" data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.modules}</a>
+      <a href="#contact" data-i18n="nav.contact" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.contact}</a>
       <LangSwitcher />
     </div>
 
@@ -34,9 +39,9 @@ import LangSwitcher from './LangSwitcher.astro';
   <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-khan-bg/95 backdrop-blur-xl border-b border-khan-border">
     <div class="px-6 py-4 flex flex-col gap-3">
-      <a href="#features" data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">Features</a>
-      <a href="#modules" data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">Modules</a>
-      <a href="#contact" data-i18n="nav.contact" class="btn-primary text-sm text-center mt-2">Contact</a>
+      <a href="#features" data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.features}</a>
+      <a href="#modules" data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.modules}</a>
+      <a href="#contact" data-i18n="nav.contact" class="btn-primary text-sm text-center mt-2">{text.nav.contact}</a>
     </div>
   </div>
 </nav>

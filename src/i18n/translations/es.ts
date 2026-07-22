@@ -1,15 +1,24 @@
 export const es = {
+  seo: {
+    title: 'VETEK — Software para Veterinarias | Gestión de Clínicas Veterinarias',
+    description:
+      'Software para veterinarias. Gestiona inventario, historias clínicas, punto de venta y análisis en tiempo real. Todo en una sola plataforma.',
+    ogTitle: 'VETEK — Software para Veterinarias',
+    ogDescription:
+      'Software para veterinarias todo-en-uno. Gestiona tu clínica con inventario, pacientes, ventas y análisis en tiempo real.',
+    ogLocale: 'es_ES',
+  },
   nav: {
     features: 'Funciones',
     modules: 'Módulos',
     contact: 'Contacto',
   },
   hero: {
-    badge: 'Plataforma de Gestión Veterinaria',
+    badge: 'Software para Veterinarias',
     headline: 'Tu Clínica Funciona.',
     headlineAccent: 'Tú Creces.',
     subheadline:
-      'Inventario, pacientes, ventas e información en tiempo real — todo conectado en cada sucursal. Menos tiempo gestionando, más tiempo curando.',
+      'Inventario, pacientes, ventas e información en tiempo real — todo conectado en cada sucursal de tu clínica. Menos tiempo gestionando, más tiempo haciendo crecer tu práctica.',
     ctaPrimary: 'Solicita una Demo',
     ctaSecondary: 'Descubre Cómo Funciona',
     scrollHint: 'Desliza para explorar',
