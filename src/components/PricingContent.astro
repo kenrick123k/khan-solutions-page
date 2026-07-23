@@ -1,0 +1,150 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const content = (text as any).pricing;
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
+const CATEGORY_ICONS: Record<string, string> = {
+  inventory: Icons.inventory,
+  pos: Icons.pos,
+  clinical: Icons.clinical,
+  security: Icons.security,
+};
+---
+
+<section id="pricing-hero" class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-grid" />
+  <div class="glow-orb w-[500px] h-[500px] bg-khan-accent/6 -top-20 -right-40" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/5 bottom-10 left-0" />
+
+  <div class="relative z-10 mx-auto max-w-4xl text-center">
+    <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+      <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+      <span>{content.hero.badge}</span>
+    </div>
+
+    <h1 class="reveal-section text-4xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight mb-6">
+      <span class="text-khan-text">{content.hero.title}</span><br />
+      <span class="gradient-text">{content.hero.titleAccent}</span>
+    </h1>
+
+    <p class="reveal-section text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto leading-relaxed">
+      {content.hero.subtitle}
+    </p>
+  </div>
+</section>
+
+<!-- Premium Plan Card -->
+<section id="pricing-plan" class="relative py-8 px-6">
+  <div class="relative z-10 mx-auto max-w-3xl">
+    <div class="reveal-section card-glass rounded-3xl p-8 sm:p-12 border-khan-accent/30 shadow-[0_0_60px_rgba(79,178,134,0.08)]">
+      <!-- Plan Header -->
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold font-display text-khan-text mb-1">
+          {content.plan.name}
+        </h2>
+        <div class="flex items-baseline justify-center gap-1 mt-4">
+          <span class="text-5xl sm:text-6xl font-bold gradient-text font-display">
+            {content.plan.price}
+          </span>
+          <span class="text-khan-text-muted text-lg">{content.plan.period}</span>
+        </div>
+        <p class="text-khan-text-secondary mt-4 max-w-md mx-auto leading-relaxed">
+          {content.plan.description}
+        </p>
+        <a href={`${localPath('/')}#contact`} class="btn-primary mt-8 text-base px-10">
+          {content.plan.cta}
+          <Fragment set:html={Icons.arrowRight} />
+        </a>
+      </div>
+
+      <!-- Divider -->
+      <div class="border-t border-khan-border my-10" />
+
+      <!-- Features Title -->
+      <div class="text-center mb-10">
+        <h3 class="text-xl sm:text-2xl font-bold font-display text-khan-text">
+          {content.plan.featuresTitle}
+        </h3>
+        <p class="text-khan-text-secondary mt-2">
+          {content.plan.featuresSubtitle}
+        </p>
+      </div>
+
+      <!-- Feature Categories -->
+      <div class="space-y-8">
+        {content.plan.categories.map((cat: any, i: number) => (
+          <div class="reveal-section card-glass rounded-2xl p-6 sm:p-8 transition-all duration-300 group">
+            <div class="flex items-start gap-4 mb-5">
+              <div class="w-12 h-12 rounded-xl bg-khan-accent/10 border border-khan-accent/20 flex items-center justify-center text-khan-accent shrink-0 group-hover:bg-khan-accent/15 group-hover:scale-110 transition-all duration-300">
+                <Fragment set:html={CATEGORY_ICONS[cat.icon] || Icons.check} />
+              </div>
+              <div>
+                <h4 class="text-lg font-bold font-display text-khan-text group-hover:text-khan-accent-light transition-colors">
+                  {cat.title}
+                </h4>
+                <p class="text-sm text-khan-accent font-medium">
+                  {cat.subtitle}
+                </p>
+              </div>
+            </div>
+            <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
+              {cat.items.map((item: string) => (
+                <li class="flex items-start gap-2.5 text-khan-text-secondary text-sm">
+                  <svg class="w-4 h-4 mt-0.5 shrink-0 text-khan-accent" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section id="pricing-cta" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+  <div class="relative z-10 mx-auto max-w-2xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+      <span class="text-khan-text">{content.bottomCta.title}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary mb-8 max-w-xl mx-auto">
+      {content.bottomCta.subtitle}
+    </p>
+    <a href={`${localPath('/')}#contact`} class="reveal-section btn-primary text-base px-10">
+      {content.bottomCta.button}
+      <Fragment set:html={Icons.arrowRight} />
+    </a>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 0.7, delay: i * 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' },
+    });
+  });
+</script>

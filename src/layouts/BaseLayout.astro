@@ -3,10 +3,30 @@ import { t } from '../i18n/index';
 import type { Locale } from '../i18n/index';
 import '../styles/global.css';
 
-const locale = (Astro.currentLocale || 'en') as Locale;
+interface Props {
+  page?: string; // SEO key: 'pricing' | 'terms' | 'policy' | 'refunds' — defaults to 'seo'
+}
+
+const { page } = Astro.props as Props;
+
+// Detect language from URL path
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
 const text = t(locale);
 const siteUrl = 'https://khan-solutions.com';
-const canonicalUrl = locale === 'en' ? siteUrl : `${siteUrl}/${locale}/`;
+
+const canonicalUrl = `${siteUrl}${Astro.url.pathname}`;
+
+// Allow page-specific SEO override
+function getSeo(key?: string) {
+  if (key && (text as any)[key]?.seo) return (text as any)[key].seo;
+  return (text as any).seo;
+}
+const seo = getSeo(page);
 ---
 
 <!DOCTYPE html>
@@ -14,14 +34,15 @@ const canonicalUrl = locale === 'en' ? siteUrl : `${siteUrl}/${locale}/`;
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary SEO -->
-    <title>{text.seo.title}</title>
-    <meta name="description" content={text.seo.description} />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang="en" href={siteUrl + '/'} />
@@ -32,16 +53,16 @@ const canonicalUrl = locale === 'en' ? siteUrl : `${siteUrl}/${locale}/`;
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:title" content={text.seo.ogTitle} />
-    <meta property="og:description" content={text.seo.ogDescription} />
+    <meta property="og:title" content={seo.ogTitle} />
+    <meta property="og:description" content={seo.ogDescription} />
     <meta property="og:image" content={`${siteUrl}/og-image.png`} />
     <meta property="og:site_name" content="KHAN Solutions" />
-    <meta property="og:locale" content={text.seo.ogLocale} />
+    <meta property="og:locale" content={seo.ogLocale} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={text.seo.ogTitle} />
-    <meta name="twitter:description" content={text.seo.ogDescription} />
+    <meta name="twitter:title" content={seo.ogTitle} />
+    <meta name="twitter:description" content={seo.ogDescription} />
     <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
 
     <!-- Structured Data -->

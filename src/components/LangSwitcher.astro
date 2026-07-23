@@ -1,49 +1,76 @@
 ---
-// Language switcher: detects browser lang, allows manual switch.
+// Language switcher: navigates to the same page in the selected locale.
 // Renders 3 buttons: EN | ES | PT
 ---
 
 <div id="lang-switcher" class="flex items-center gap-1">
-  <button data-lang="en" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-accent bg-khan-accent/10" aria-label="English">EN</button>
+  <button data-lang="en" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-text-muted hover:text-khan-text" aria-label="English">EN</button>
   <button data-lang="es" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-text-muted hover:text-khan-text" aria-label="Español">ES</button>
   <button data-lang="pt" class="lang-btn text-xs font-medium px-2 py-1 rounded transition-colors text-khan-text-muted hover:text-khan-text" aria-label="Português">PT</button>
 </div>
 
 <script>
-  function setLang(lang: string) {
-    localStorage.setItem('lang', lang);
-    document.documentElement.setAttribute('data-lang', lang);
-    // Update active button
+  const SUPPORTED = ['en', 'es', 'pt'] as const;
+
+  function getCurrentLocale(): string {
+    const path = window.location.pathname;
+    if (path.startsWith('/es/')) return 'es';
+    if (path.startsWith('/pt/')) return 'pt';
+    return 'en';
+  }
+
+  /**
+   * Strip locale prefix from path.
+   * /es/pricing/  → /pricing/
+   * /pt/terms/    → /terms/
+   * /pricing/     → /pricing/
+   */
+  function stripLocale(path: string): string {
+    for (const loc of ['es', 'pt']) {
+      if (path.startsWith(`/${loc}/`)) return path.slice(loc.length + 1); // +1 for leading /
+    }
+    return path;
+  }
+
+  /**
+   * Build path for target locale.
+   * en → no prefix. es/pt → /<locale>/<rest>
+   */
+  function buildPath(targetLocale: string, basePath: string): string {
+    if (targetLocale === 'en') return basePath;
+    return `/${targetLocale}${basePath}`;
+  }
+
+  function navigateToLocale(targetLocale: string) {
+    const basePath = stripLocale(window.location.pathname);
+    const newPath = buildPath(targetLocale, basePath);
+    // Preserve query string and hash
+    const qs = window.location.search;
+    const hash = window.location.hash;
+    window.location.href = newPath + qs + hash;
+  }
+
+  function updateActiveButton(locale: string) {
     document.querySelectorAll('.lang-btn').forEach((btn) => {
       const el = btn as HTMLElement;
-      const isActive = el.dataset.lang === lang;
+      const isActive = el.dataset.lang === locale;
       el.classList.toggle('text-khan-accent', isActive);
       el.classList.toggle('bg-khan-accent/10', isActive);
       el.classList.toggle('text-khan-text-muted', !isActive);
     });
-    // Dispatch event for other components to react
-    window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
   }
 
-  // Detect initial language from URL path
-  function detectLang(): string {
-    const path = window.location.pathname;
-    if (path.startsWith('/es/')) return 'es';
-    if (path.startsWith('/pt/')) return 'pt';
-    const stored = localStorage.getItem('lang');
-    if (stored && ['en', 'es', 'pt'].includes(stored)) return stored;
-    const browser = navigator.language.split('-')[0];
-    if (['en', 'es', 'pt'].includes(browser)) return browser;
-    return 'en';
-  }
+  // Highlight current locale button on load
+  const currentLocale = getCurrentLocale();
+  updateActiveButton(currentLocale);
 
-  const lang = detectLang();
-  setLang(lang);
-
-  // Click handlers
+  // Click handlers — navigate to same page in chosen locale
   document.querySelectorAll('.lang-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      setLang((btn as HTMLElement).dataset.lang || 'en');
+      const targetLang = (btn as HTMLElement).dataset.lang || 'en';
+      if (targetLang === getCurrentLocale()) return; // already on this locale
+      localStorage.setItem('lang', targetLang);
+      navigateToLocale(targetLang);
     });
   });
 </script>

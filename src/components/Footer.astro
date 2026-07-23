@@ -3,26 +3,46 @@ import { CONFIG } from '../lib/config';
 import { t } from '../i18n/index';
 import type { Locale } from '../i18n/index';
 
-const locale = (Astro.currentLocale || 'en') as Locale;
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
 const text = t(locale);
 const YEAR = new Date().getFullYear();
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
 ---
 
 <footer class="relative py-12 px-6 border-t border-khan-border">
-  <div class="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-6">
-    <div class="flex items-center gap-3">
-      <img src="/minimal-logo.svg" alt="KHAN Solutions" class="h-8 w-auto opacity-70" width="32" height="32" />
-      <span class="text-sm font-semibold text-khan-text-muted font-display">
-        KHAN<span class="text-khan-accent">.</span> Solutions
-      </span>
+  <div class="mx-auto max-w-7xl flex flex-col items-center gap-6">
+    <div class="flex flex-col sm:flex-row items-center justify-between w-full gap-6">
+      <div class="flex items-center gap-3">
+        <img src="/minimal-logo.svg" alt="KHAN Solutions" class="h-8 w-auto opacity-70" width="32" height="32" />
+        <span class="text-sm font-semibold text-khan-text-muted font-display">
+          KHAN<span class="text-khan-accent">.</span> Solutions
+        </span>
+      </div>
+
+      <p class="text-sm text-khan-text-muted" data-i18n="footer.tagline">
+        {text.footer.tagline}
+      </p>
+
+      <p class="text-xs text-khan-text-muted">
+        &copy; {YEAR} KHAN Solutions. <span data-i18n="footer.rights">{text.footer.rights}</span>
+      </p>
     </div>
 
-    <p class="text-sm text-khan-text-muted" data-i18n="footer.tagline">
-      {text.footer.tagline}
-    </p>
-
-    <p class="text-xs text-khan-text-muted">
-      &copy; {YEAR} KHAN Solutions. <span data-i18n="footer.rights">{text.footer.rights}</span>
-    </p>
+    <!-- Legal Links -->
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-khan-text-muted">
+      <a href={localPath('/terms/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.terms">{text.footer.terms}</a>
+      <span class="text-khan-border">|</span>
+      <a href={localPath('/policy/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.privacy">{text.footer.privacy}</a>
+      <span class="text-khan-border">|</span>
+      <a href={localPath('/refunds/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.refunds">{text.footer.refunds}</a>
+    </div>
   </div>
 </footer>

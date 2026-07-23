@@ -1,0 +1,89 @@
+---
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+interface Props {
+  page: 'terms' | 'policy' | 'refunds';
+}
+
+const { page } = Astro.props;
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const content = (text as any)[page];
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
+function backLabel() {
+  if (locale === 'es') return '← Volver al Inicio';
+  if (locale === 'pt') return '← Voltar ao Início';
+  return '← Back to Home';
+}
+---
+
+<section class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 px-6">
+  <!-- Ambient background -->
+  <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 right-0" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/4 bottom-20 left-0" />
+
+  <div class="relative z-10 mx-auto max-w-3xl">
+    <!-- Hero -->
+    <div class="text-center mb-16">
+      <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+        <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+        <span>{content.hero.badge}</span>
+      </div>
+      <h1 class="reveal-section text-4xl sm:text-5xl font-bold font-display mb-4">
+        <span class="text-khan-text">{content.hero.title}</span>{' '}
+        <span class="gradient-text">{content.hero.titleAccent}</span>
+      </h1>
+      <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto">
+        {content.hero.subtitle}
+      </p>
+      <p class="reveal-section text-sm text-khan-text-muted mt-6">
+        {content.lastUpdated}
+      </p>
+    </div>
+
+    <!-- Content -->
+    <div class="reveal-section card-glass rounded-2xl p-8 sm:p-10 space-y-8">
+      {content.sections.map((section: { heading: string; body: string }) => (
+        <div>
+          <h2 class="text-lg font-bold font-display text-khan-text mb-3">
+            {section.heading}
+          </h2>
+          <p class="text-khan-text-secondary leading-relaxed">
+            {section.body}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Back link -->
+    <div class="reveal-section text-center mt-12">
+      <a href={localPath('/')} class="btn-outline text-sm">
+        {backLabel()}
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 0.7, delay: i * 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 95%' },
+    });
+  });
+</script>

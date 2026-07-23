@@ -7,10 +7,15 @@
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
     }
   ],
   "start_url": "/",
   "display": "minimal-ui",
-  "theme_color": "#0d1117",
-  "background_color": "#0d1117"
+  "theme_color": "#060910",
+  "background_color": "#060910"
 }

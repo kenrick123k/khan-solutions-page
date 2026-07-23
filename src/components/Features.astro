@@ -3,7 +3,12 @@ import { Icons } from '../lib/icons';
 import { t } from '../i18n/index';
 import type { Locale } from '../i18n/index';
 
-const locale = (Astro.currentLocale || 'en') as Locale;
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
 const text = t(locale);
 
 const ICON_KEYS = ['inventory', 'clinical', 'pos', 'analytics', 'realtime', 'security'] as const;
