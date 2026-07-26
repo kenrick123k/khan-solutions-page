@@ -38,6 +38,8 @@ function localPath(path: string) {
 
     <!-- Legal Links -->
     <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-khan-text-muted">
+      <a href={localPath('/blog/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.blog">{text.footer.blog || 'Blog'}</a>
+      <span class="text-khan-border">|</span>
       <a href={localPath('/terms/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.terms">{text.footer.terms}</a>
       <span class="text-khan-border">|</span>
       <a href={localPath('/policy/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.privacy">{text.footer.privacy}</a>

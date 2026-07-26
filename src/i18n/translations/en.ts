@@ -12,6 +12,7 @@ export const en = {
     features: 'Features',
     modules: 'Modules',
     pricing: 'Pricing',
+    blog: 'Blog',
     contact: 'Contact',
   },
   hero: {
@@ -124,10 +125,10 @@ export const en = {
     title: 'Numbers That',
     titleAccent: 'Deliver',
     items: [
-      { label: 'Real-Time Performance' },
-      { label: 'Integrated Modules' },
+      { label: 'Real-Time Sync Across All Branches' },
+      { label: 'Integrated Modules in One Platform' },
       { label: 'Uptime Commitment' },
-      { label: 'Data Encryption' },
+      { label: 'Bank-Grade AES-256 Encryption' },
     ],
   },
   contact: {
@@ -166,6 +167,7 @@ export const en = {
   footer: {
     tagline: 'Veterinary Practice Management Platform',
     rights: 'All rights reserved.',
+    blog: 'Blog',
     terms: 'Terms of Service',
     privacy: 'Privacy Policy',
     refunds: 'Refund Policy',

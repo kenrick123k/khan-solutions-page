@@ -12,6 +12,7 @@ export const pt = {
     features: 'Recursos',
     modules: 'Módulos',
     pricing: 'Preços',
+    blog: 'Blog',
     contact: 'Contato',
   },
   hero: {
@@ -124,10 +125,10 @@ export const pt = {
     title: 'Números Que',
     titleAccent: 'Entregam',
     items: [
-      { label: 'Performance em Tempo Real' },
-      { label: 'Módulos Integrados' },
+      { label: 'Sincronização em Tempo Real Entre Todas as Filiais' },
+      { label: 'Módulos Integrados em Uma Plataforma' },
       { label: 'Compromisso de Disponibilidade' },
-      { label: 'Criptografia de Dados' },
+      { label: 'Criptografia Bancária AES-256' },
     ],
   },
   contact: {
@@ -166,6 +167,7 @@ export const pt = {
   footer: {
     tagline: 'Plataforma de Gestão de Clínicas Veterinárias',
     rights: 'Todos os direitos reservados.',
+    blog: 'Blog',
     terms: 'Termos de Serviço',
     privacy: 'Política de Privacidade',
     refunds: 'Política de Reembolso',
@@ -261,6 +263,21 @@ export const pt = {
             'Design responsivo — funciona em desktop, tablet e mobile',
           ],
         },
+      ],
+    },
+    faq: {
+      title: 'Perguntas',
+      titleAccent: 'Frequentes',
+      subtitle: 'Tudo o que você precisa saber sobre o VETEK Premium.',
+      items: [
+        { q: 'Existe um teste gratuito?', a: 'Sim. Oferecemos um período de avaliação para que você possa testar o VETEK com os fluxos de trabalho reais da sua clínica antes de se comprometer.' },
+        { q: 'Como funciona o preço para múltiplas filiais?', a: 'O Premium cobre todas as suas filiais a um preço fixo por clínica — sem cobranças adicionais por localização.' },
+        { q: 'Posso transferir dados do meu sistema atual?', a: 'Sim. Fornecemos assistência na migração de dados para trazer seu catálogo de produtos, registros de clientes e históricos clínicos para o VETEK.' },
+        { q: 'Qual suporte está incluído?', a: 'O Premium inclui suporte por e-mail com resposta em até 24 horas. Treinamento de implementação está disponível para novas clínicas.' },
+        { q: 'Meus dados estão seguros?', a: 'Sim. Cada organização tem dados completamente isolados com autenticação criptografada, controle de acesso baseado em funções e trilhas de auditoria completas.' },
+        { q: 'O VETEK funciona em dispositivos móveis?', a: 'Sim. A plataforma é responsiva e funciona em navegadores de desktop, tablets e dispositivos móveis.' },
+        { q: 'Os prontuários clínicos podem ser transferidos entre filiais?', a: 'Sim. A transferência de prontuários clínicos entre filiais é integrada ao Premium. O histórico completo do paciente acompanha o paciente.' },
+        { q: 'Quais idiomas são suportados?', a: 'O VETEK oferece suporte a inglês, espanhol e português — com tradução completa da interface e conteúdo nos três idiomas.' },
       ],
     },
     bottomCta: {
