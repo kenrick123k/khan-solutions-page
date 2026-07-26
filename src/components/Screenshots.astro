@@ -1,0 +1,269 @@
+---
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+
+interface Screenshot {
+  src: string;
+  width: number;
+  height: number;
+  alt: Record<Locale, string>;
+  desc: Record<Locale, string>;
+}
+
+const screenshots: Screenshot[] = [
+  {
+    src: '/screenshots/dashboard-cash-register.webp',
+    width: 784, height: 421,
+    alt: {
+      en: 'VETEK Dashboard — Cash Register Real-Time Card with Sales Overview',
+      es: 'Panel VETEK — Tarjeta de Caja Registradora en Tiempo Real con Resumen de Ventas',
+      pt: 'Painel VETEK — Cartão de Caixa Registradora em Tempo Real com Resumo de Vendas',
+    },
+    desc: {
+      en: 'Real-time cash register card showing accumulated sales, session status, and instant closing difference calculation.',
+      es: 'Tarjeta de caja registradora en tiempo real mostrando ventas acumuladas, estado de sesión y cálculo instantáneo de diferencia al cierre.',
+      pt: 'Cartão de caixa registradora em tempo real exibindo vendas acumuladas, status da sessão e cálculo instantâneo da diferença no fechamento.',
+    },
+  },
+  {
+    src: '/screenshots/dashboard-expiration-alerts.webp',
+    width: 817, height: 397,
+    alt: {
+      en: 'VETEK Dashboard — Expiration Alerts and Low Stock Warnings Card',
+      es: 'Panel VETEK — Tarjeta de Alertas de Caducidad y Avisos de Stock Bajo',
+      pt: 'Painel VETEK — Cartão de Alertas de Vencimento e Avisos de Estoque Baixo',
+    },
+    desc: {
+      en: 'Expiration alerts and low stock warnings dashboard card — never run out of critical supplies or dispense expired products.',
+      es: 'Tarjeta de alertas de caducidad y stock bajo en el panel — nunca te quedes sin suministros críticos ni dispenses productos vencidos.',
+      pt: 'Cartão de alertas de vencimento e estoque baixo no painel — nunca fique sem suprimentos críticos nem dispense produtos vencidos.',
+    },
+  },
+  {
+    src: '/screenshots/dashboard-stock-entries.webp',
+    width: 600, height: 420,
+    alt: {
+      en: 'VETEK Dashboard — Real-Time Stock Entries Monitoring Card',
+      es: 'Panel VETEK — Tarjeta de Entradas de Stock en Tiempo Real',
+      pt: 'Painel VETEK — Cartão de Entradas de Estoque em Tempo Real',
+    },
+    desc: {
+      en: 'Real-time stock entries card tracking all incoming inventory — purchases, returns, and inter-branch transfers in one view.',
+      es: 'Tarjeta de entradas de stock en tiempo real — compras, devoluciones y transferencias entre sucursales en una sola vista.',
+      pt: 'Cartão de entradas de estoque em tempo real — compras, devoluções e transferências entre filiais em uma única visão.',
+    },
+  },
+  {
+    src: '/screenshots/dashboard-stock-exits.webp',
+    width: 588, height: 402,
+    alt: {
+      en: 'VETEK Dashboard — Real-Time Stock Exits Tracking Card',
+      es: 'Panel VETEK — Tarjeta de Salidas de Stock en Tiempo Real',
+      pt: 'Painel VETEK — Cartão de Saídas de Estoque em Tempo Real',
+    },
+    desc: {
+      en: 'Real-time stock exits card tracking all outgoing inventory — sales, transfers, and adjustments with full traceability.',
+      es: 'Tarjeta de salidas de stock en tiempo real — ventas, transferencias y ajustes con trazabilidad completa.',
+      pt: 'Cartão de saídas de estoque em tempo real — vendas, transferências e ajustes com rastreabilidade completa.',
+    },
+  },
+  {
+    src: '/screenshots/clinicalrecords-pet-profile.webp',
+    width: 493, height: 559,
+    alt: {
+      en: 'VETEK Clinical Records — Pet Profile with Complete Medical History Summary',
+      es: 'VETEK Historias Clínicas — Perfil de Mascota con Resumen de Historia Médica Completa',
+      pt: 'VETEK Prontuários Clínicos — Perfil do Pet com Resumo do Histórico Médico Completo',
+    },
+    desc: {
+      en: 'Comprehensive pet profile with species, breed, photo, and complete clinical history timeline — consultations, surgeries, vaccinations, and lab results.',
+      es: 'Perfil completo de mascota con especie, raza, foto y línea de tiempo del historial clínico — consultas, cirugías, vacunas y resultados de laboratorio.',
+      pt: 'Perfil completo do pet com espécie, raça, foto e linha do tempo do histórico clínico — consultas, cirurgias, vacinas e resultados laboratoriais.',
+    },
+  },
+  {
+    src: '/screenshots/stock-statistics-gross-profit.webp',
+    width: 626, height: 253,
+    alt: {
+      en: 'VETEK Stock Statistics — Estimated Gross Profit Analytics Card',
+      es: 'VETEK Estadísticas de Stock — Tarjeta de Ganancia Bruta Estimada',
+      pt: 'VETEK Estatísticas de Estoque — Cartão de Lucro Bruto Estimado',
+    },
+    desc: {
+      en: 'Estimated gross profit analytics card — revenue, COGS, margin, and ROI calculated automatically from real-time inventory movements.',
+      es: 'Tarjeta de ganancia bruta estimada — ingresos, COGS, margen y ROI calculados automáticamente desde movimientos de inventario en tiempo real.',
+      pt: 'Cartão de lucro bruto estimado — receita, COGS, margem e ROI calculados automaticamente a partir dos movimentos de estoque em tempo real.',
+    },
+  },
+  {
+    src: '/screenshots/permissions-role-overview.webp',
+    width: 487, height: 299,
+    alt: {
+      en: 'VETEK Permissions — Role-Based Access Control Overview',
+      es: 'VETEK Permisos — Vista General de Control de Acceso por Roles',
+      pt: 'VETEK Permissões — Visão Geral do Controle de Acesso por Funções',
+    },
+    desc: {
+      en: 'Role-based access control overview — define roles, assign granular permissions, and control what each staff member can see and do.',
+      es: 'Vista general de control de acceso por roles — define roles, asigna permisos granulares y controla qué puede ver y hacer cada miembro del personal.',
+      pt: 'Visão geral do controle de acesso por funções — defina funções, atribua permissões granulares e controle o que cada membro da equipe pode ver e fazer.',
+    },
+  },
+  {
+    src: '/screenshots/permissions-module-assignment.webp',
+    width: 604, height: 367,
+    alt: {
+      en: 'VETEK Permissions — Module Assignment to Roles Interface',
+      es: 'VETEK Permisos — Interfaz de Asignación de Módulos a Roles',
+      pt: 'VETEK Permissões — Interface de Atribuição de Módulos a Funções',
+    },
+    desc: {
+      en: 'Module assignment interface — assign specific platform modules to each role: inventory, cash register, clinical records, and analytics.',
+      es: 'Interfaz de asignación de módulos — asigna módulos específicos a cada rol: inventario, caja registradora, historias clínicas y análisis.',
+      pt: 'Interface de atribuição de módulos — atribua módulos específicos a cada função: inventário, caixa registradora, prontuários clínicos e análises.',
+    },
+  },
+  {
+    src: '/screenshots/branches-location-details.webp',
+    width: 416, height: 358,
+    alt: {
+      en: 'VETEK Branches — Multi-Location Branch Details and Configuration Card',
+      es: 'VETEK Sucursales — Tarjeta de Detalles y Configuración Multi-Sucursal',
+      pt: 'VETEK Filiais — Cartão de Detalhes e Configuração Multi-Filial',
+    },
+    desc: {
+      en: 'Multi-branch location details card — view and configure each clinic branch with address, contact info, and operational status.',
+      es: 'Tarjeta de detalles de sucursales — visualiza y configura cada sucursal con dirección, datos de contacto y estado operativo.',
+      pt: 'Cartão de detalhes das filiais — visualize e configure cada filial com endereço, dados de contato e status operacional.',
+    },
+  },
+];
+---
+
+<section id="screenshots" class="relative py-24 sm:py-32 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-khan-bg">
+    <div class="glow-orb w-[600px] h-[600px] bg-khan-accent/4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-[1200px]">
+    <div class="text-center mb-16">
+      <h2 class="reveal-section text-3xl sm:text-5xl font-bold font-display mb-4">
+        <span class="text-khan-text">{text.screenshots?.title || 'See VETEK'}</span>{' '}
+        <span class="gradient-text">{text.screenshots?.titleAccent || 'in Action'}</span>
+      </h2>
+      <p class="reveal-section text-lg text-khan-text-secondary max-w-2xl mx-auto">
+        {text.screenshots?.subtitle || 'Real screenshots from the VETEK platform. Every module, every card — built for veterinary clinics.'}
+      </p>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="mb-16">
+      <h3 class="reveal-section text-xl font-bold font-display text-khan-accent mb-6 text-center">
+        {locale === 'es' ? 'Panel de Control' : locale === 'pt' ? 'Painel de Controle' : 'Dashboard'}
+      </h3>
+      <div class="grid sm:grid-cols-2 gap-6">
+        {screenshots.slice(0, 4).map((img, i) => (
+          <div class="reveal-section card-glass rounded-2xl overflow-hidden transition-all duration-300 hover:border-khan-accent/30 hover:shadow-[0_0_50px_rgba(79,178,134,0.12)]">
+            <img
+              src={img.src}
+              alt={img.alt[locale] || img.alt.en}
+              width={img.width}
+              height={img.height}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : undefined}
+              class="w-full h-auto"
+            />
+            <div class="p-4 sm:p-5">
+              <p class="text-sm text-khan-text-secondary leading-relaxed">{img.desc[locale] || img.desc.en}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Clinical + Stock Stats -->
+    <div class="mb-16">
+      <h3 class="reveal-section text-xl font-bold font-display text-khan-accent mb-6 text-center">
+        {locale === 'es' ? 'Registros Clínicos y Estadísticas' : locale === 'pt' ? 'Prontuários e Estatísticas' : 'Clinical Records & Statistics'}
+      </h3>
+      <div class="grid sm:grid-cols-2 gap-6 items-start">
+        <!-- Clinical Records: native resolution -->
+        {screenshots.slice(4, 5).map((img, i) => (
+          <div class="reveal-section card-glass rounded-2xl overflow-hidden transition-all duration-300 hover:border-khan-accent/30 hover:shadow-[0_0_50px_rgba(79,178,134,0.12)]">
+            <img
+              src={img.src}
+              alt={img.alt[locale] || img.alt.en}
+              width={img.width}
+              height={img.height}
+              loading="lazy"
+              class="w-full h-auto"
+            />
+            <div class="p-4 sm:p-5">
+              <p class="text-sm text-khan-text-secondary leading-relaxed">{img.desc[locale] || img.desc.en}</p>
+            </div>
+          </div>
+        ))}
+        <!-- Stock Statistics: fixed container for wide/short image -->
+        {screenshots.slice(5, 6).map((img, i) => (
+          <div class="reveal-section card-glass rounded-2xl overflow-hidden transition-all duration-300 hover:border-khan-accent/30 hover:shadow-[0_0_50px_rgba(79,178,134,0.12)]">
+            <div class="relative aspect-[16/10] bg-khan-bg-secondary/30">
+              <img
+                src={img.src}
+                alt={img.alt[locale] || img.alt.en}
+                width={img.width}
+                height={img.height}
+                loading="lazy"
+                class="absolute inset-0 w-full h-full object-contain"
+              />
+            </div>
+            <div class="p-4 sm:p-5">
+              <p class="text-sm text-khan-text-secondary leading-relaxed">{img.desc[locale] || img.desc.en}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Permissions + Branches -->
+    <div>
+      <h3 class="reveal-section text-xl font-bold font-display text-khan-accent mb-6 text-center">
+        {locale === 'es' ? 'Seguridad y Multi-Sucursal' : locale === 'pt' ? 'Segurança e Multi-Filial' : 'Security & Multi-Branch'}
+      </h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {screenshots.slice(6, 9).map((img, i) => (
+          <div class="reveal-section card-glass rounded-2xl overflow-hidden transition-all duration-300 hover:border-khan-accent/30 hover:shadow-[0_0_50px_rgba(79,178,134,0.12)]">
+            <img
+              src={img.src}
+              alt={img.alt[locale] || img.alt.en}
+              width={img.width}
+              height={img.height}
+              loading="lazy"
+              class="w-full h-auto"
+            />
+            <div class="p-4 sm:p-5">
+              <p class="text-sm text-khan-text-secondary leading-relaxed">{img.desc[locale] || img.desc.en}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('#screenshots .reveal-section').forEach((el) => {
+    gsap.fromTo(el, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+  });
+</script>

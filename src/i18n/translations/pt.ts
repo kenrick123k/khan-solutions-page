@@ -121,6 +121,11 @@ export const pt = {
       },
     ],
   },
+  screenshots: {
+    title: 'VETEK',
+    titleAccent: 'em Ação',
+    subtitle: 'Capturas reais da plataforma VETEK. Limpa, rápida e projetada para clínicas veterinárias.',
+  },
   stats: {
     title: 'Números Que',
     titleAccent: 'Entregam',
@@ -190,8 +195,8 @@ export const pt = {
     },
     plan: {
       name: 'Premium',
-      price: 'Fale Conosco',
-      period: 'por clínica',
+      price: '$30',
+      period: 'USD/mês por clínica',
       description: 'Acesso completo a todos os módulos com suporte multi-filial, transferência de prontuários clínicos e análises em tempo real.',
       cta: 'Solicite uma Demo',
       featuresTitle: 'Tudo Incluído no Premium',

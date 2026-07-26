@@ -121,6 +121,11 @@ export const en = {
       },
     ],
   },
+  screenshots: {
+    title: 'See VETEK',
+    titleAccent: 'in Action',
+    subtitle: 'Real screenshots from the VETEK platform. Clean, fast, and built for veterinary clinics.',
+  },
   stats: {
     title: 'Numbers That',
     titleAccent: 'Deliver',
@@ -190,8 +195,8 @@ export const en = {
     },
     plan: {
       name: 'Premium',
-      price: 'Contact Us',
-      period: 'per clinic',
+      price: '$30',
+      period: 'USD/month per clinic',
       description: 'Full access to all modules with multi-branch support, clinical record transfers, and real-time analytics.',
       cta: 'Request a Demo',
       featuresTitle: 'Everything Included in Premium',

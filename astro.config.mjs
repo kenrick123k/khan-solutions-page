@@ -17,7 +17,6 @@ export default defineConfig({
         },
       },
       serialize(item) {
-        // Add lastmod to all URLs for better crawl scheduling
         return { ...item, lastmod: new Date().toISOString().split('T')[0] };
       },
     }),
