@@ -22,7 +22,21 @@ const CATEGORY_ICONS: Record<string, string> = {
   clinical: Icons.clinical,
   security: Icons.security,
 };
+
+const siteUrl = 'https://khan-solutions.com';
+const pricingNames = { en: 'Pricing', es: 'Precios', pt: 'Preços' };
+const pricingPath = localPath('/pricing/');
 ---
+
+<!-- BreadcrumbList Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + localPath('/') },
+    { '@type': 'ListItem', position: 2, name: pricingNames[locale], item: siteUrl + pricingPath },
+  ],
+})} />
 
 <section id="pricing-hero" class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 overflow-hidden">
   <div class="absolute inset-0 bg-grid" />
@@ -36,7 +50,7 @@ const CATEGORY_ICONS: Record<string, string> = {
     </div>
 
     <h1 class="reveal-section text-4xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight mb-6">
-      <span class="text-khan-text">{content.hero.title}</span><br />
+      <span class="text-khan-text">{content.hero.title}</span>{' '}
       <span class="gradient-text">{content.hero.titleAccent}</span>
     </h1>
 
@@ -116,6 +130,53 @@ const CATEGORY_ICONS: Record<string, string> = {
     </div>
   </div>
 </section>
+
+<!-- FAQ Section -->
+<section id="pricing-faq" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg/80" />
+  <div class="relative z-10 mx-auto max-w-3xl">
+    <div class="text-center mb-12">
+      <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{content.faq?.title || 'Frequently Asked'}</span>{' '}
+        <span class="gradient-text">{content.faq?.titleAccent || 'Questions'}</span>
+      </h2>
+      <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto">
+        {content.faq?.subtitle || 'Everything you need to know about VETEK Premium.'}
+      </p>
+    </div>
+    <div class="space-y-4">
+      {(content.faq?.items || [
+        { q: 'Is there a free trial?', a: 'Yes. We offer an evaluation period so you can test VETEK with your clinic\'s real workflows before committing.' },
+        { q: 'How does multi-branch pricing work?', a: 'Premium covers all your branches at one fixed price per clinic — no per-location surcharges.' },
+        { q: 'Can I transfer data from my current system?', a: 'Yes. We provide data migration assistance to bring your product catalog, client records, and clinical histories into VETEK.' },
+        { q: 'What support is included?', a: 'Premium includes email support with response within 24 hours. Implementation training is available for new clinics.' },
+        { q: 'Is my data secure?', a: 'Yes. Each clinic organization has fully isolated data with encrypted authentication, role-based access control, and complete audit trails.' },
+        { q: 'Does VETEK work on mobile?', a: 'Yes. The platform is responsive and works on desktop, tablet, and mobile browsers.' },
+        { q: 'Can clinical records transfer between branches?', a: 'Yes. Inter-branch clinical record transfer is built into Premium. Complete patient history follows the patient.' },
+        { q: 'What languages are supported?', a: 'VETEK supports English, Spanish, and Portuguese — with full UI and content translation across all three.' },
+      ]).map((item: { q: string; a: string }) => (
+        <div class="reveal-section card-glass rounded-2xl p-6 sm:p-8 transition-all duration-300">
+          <h3 class="text-lg font-bold font-display text-khan-text mb-3">{item.q}</h3>
+          <p class="text-khan-text-secondary leading-relaxed">{item.a}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- QAPage Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'QAPage',
+  mainEntity: {
+    '@type': 'Question',
+    name: (content.faq?.items || [{ q: 'Is there a free trial?', a: 'Yes.' }])[0].q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: (content.faq?.items || [{ q: 'Is there a free trial?', a: 'Yes.' }])[0].a,
+    },
+  },
+})} />
 
 <!-- Bottom CTA -->
 <section id="pricing-cta" class="relative py-20 sm:py-28 px-6">

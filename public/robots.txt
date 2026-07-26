@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://khan-solutions.com/sitemap.xml
+Sitemap: https://khan-solutions.com/sitemap-index.xml

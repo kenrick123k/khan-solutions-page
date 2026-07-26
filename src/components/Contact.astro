@@ -33,7 +33,7 @@ const projectTypes = [
         <span data-i18n="contact.badge">{text.contact.badge}</span>
       </div>
       <h2 class="reveal-section text-3xl sm:text-5xl font-bold font-display mb-6">
-        <span data-i18n="contact.title">{text.contact.title}</span><br />
+        <span data-i18n="contact.title">{text.contact.title}</span>{' '}
         <span class="gradient-text" data-i18n="contact.titleAccent">{text.contact.titleAccent}</span>
       </h2>
       <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto" data-i18n="contact.subtitle">
@@ -112,7 +112,7 @@ const projectTypes = [
         </div>
         <div id="contact-error" class="hidden p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
           <span data-i18n="contact.form.error">{text.contact.form.error}</span>
-          <a href="mailto:{CONFIG.contact.email}" class="font-semibold underline">{CONFIG.contact.email}</a>
+          <a href={`mailto:${CONFIG.contact.email}`} class="font-semibold underline">{CONFIG.contact.email}</a>
         </div>
       </form>
     </div>

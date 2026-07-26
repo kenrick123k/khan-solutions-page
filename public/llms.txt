@@ -1,0 +1,21 @@
+# KHAN Solutions
+Veterinary practice management platform for multi-branch clinics. Inventory, clinical records, cash register, real-time analytics.
+
+## Product
+VETEK - All-in-one veterinary practice management software.
+Multi-branch inventory tracking, SOAP clinical records, point-of-sale with automatic inventory sync, real-time analytics dashboard, role-based access control, three-language support (English, Spanish, Portuguese).
+
+## Pages
+- Home: https://khan-solutions.com/
+- Pricing: https://khan-solutions.com/pricing/
+- Terms of Service: https://khan-solutions.com/terms/
+- Privacy Policy: https://khan-solutions.com/policy/
+- Refund Policy: https://khan-solutions.com/refunds/
+
+## Languages
+- English: https://khan-solutions.com/
+- Spanish: https://khan-solutions.com/es/
+- Portuguese: https://khan-solutions.com/pt/
+
+## Contact
+Email: administration@khan-solutions.com

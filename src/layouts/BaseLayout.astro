@@ -5,9 +5,13 @@ import '../styles/global.css';
 
 interface Props {
   page?: string; // SEO key: 'pricing' | 'terms' | 'policy' | 'refunds' — defaults to 'seo'
+  title?: string; // Override <title>
+  description?: string; // Override meta description
+  ogTitle?: string; // Override OG title
+  ogDescription?: string; // Override OG description
 }
 
-const { page } = Astro.props as Props;
+const { page, title, description, ogTitle, ogDescription } = Astro.props as Props;
 
 // Detect language from URL path
 function detectLocale(pathname: string): Locale {
@@ -27,6 +31,19 @@ function getSeo(key?: string) {
   return (text as any).seo;
 }
 const seo = getSeo(page);
+
+// Build locale-aware alternate URLs for hreflang tags
+function localizePath(pathname: string, targetLocale: Locale): string {
+  let base = pathname;
+  if (base.startsWith('/es/')) base = base.slice(3);
+  else if (base.startsWith('/pt/')) base = base.slice(3);
+  if (!base.startsWith('/')) base = '/' + base;
+  if (!base.endsWith('/')) base = base + '/';
+  return targetLocale === 'en' ? base : `/${targetLocale}${base}`;
+}
+const enPath = localizePath(Astro.url.pathname, 'en');
+const esPath = localizePath(Astro.url.pathname, 'es');
+const ptPath = localizePath(Astro.url.pathname, 'pt');
 ---
 
 <!DOCTYPE html>
@@ -41,20 +58,21 @@ const seo = getSeo(page);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary SEO -->
-    <title>{seo.title}</title>
-    <meta name="description" content={seo.description} />
+    <title>{title || seo.title}</title>
+    <meta name="description" content={description || seo.description} />
+    <meta name="author" content="KHAN Solutions" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" hreflang="en" href={siteUrl + '/'} />
-    <link rel="alternate" hreflang="es" href={siteUrl + '/es/'} />
-    <link rel="alternate" hreflang="pt" href={siteUrl + '/pt/'} />
-    <link rel="alternate" hreflang="x-default" href={siteUrl + '/'} />
+    <link rel="alternate" hreflang="en" href={siteUrl + enPath} />
+    <link rel="alternate" hreflang="es" href={siteUrl + esPath} />
+    <link rel="alternate" hreflang="pt" href={siteUrl + ptPath} />
+    <link rel="alternate" hreflang="x-default" href={siteUrl + enPath} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:title" content={seo.ogTitle} />
-    <meta property="og:description" content={seo.ogDescription} />
+    <meta property="og:title" content={ogTitle || seo.ogTitle} />
+    <meta property="og:description" content={ogDescription || seo.ogDescription} />
     <meta property="og:image" content={`${siteUrl}/og-image.png`} />
     <meta property="og:site_name" content="KHAN Solutions" />
     <meta property="og:locale" content={seo.ogLocale} />
@@ -66,15 +84,42 @@ const seo = getSeo(page);
     <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
 
     <!-- Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
-      name: 'VETEK',
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Web',
-      offers: { '@type': 'Offer', description: 'Veterinary Practice Management Platform' },
-      provider: { '@type': 'Organization', name: 'KHAN Solutions', email: 'administration@khan-solutions.com', url: siteUrl },
-    })} />
+    <script type="application/ld+json" set:html={JSON.stringify([
+      {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'VETEK',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        description: seo.description,
+        offers: { '@type': 'Offer', description: 'Veterinary Practice Management Platform', availability: 'https://schema.org/InStock' },
+        provider: { '@type': 'Organization', name: 'KHAN Solutions' },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'KHAN Solutions',
+        url: siteUrl,
+        email: 'administration@khan-solutions.com',
+        logo: `${siteUrl}/minimal-logo.svg`,
+        description: 'Veterinary practice management platform. Multi-branch inventory, clinical records, cash register, and real-time analytics.',
+        foundingDate: '2024',
+        areaServed: { '@type': 'Continent', name: 'Latin America' },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'KHAN Solutions',
+        url: siteUrl,
+        description: seo.description,
+        inLanguage: ['en', 'es', 'pt'],
+        potentialAction: {
+          '@type': 'SearchAction',
+          'target': { '@type': 'EntryPoint', 'urlTemplate': `${siteUrl}/?search={search_term_string}` },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+    ])} />
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

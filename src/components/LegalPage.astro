@@ -15,10 +15,15 @@ function detectLocale(pathname: string): Locale {
 const locale = detectLocale(Astro.url.pathname);
 const text = t(locale);
 const content = (text as any)[page];
+const siteUrl = 'https://khan-solutions.com';
 
 function localPath(path: string) {
   return locale === 'en' ? path : `/${locale}${path}`;
 }
+
+const pagePath = localPath(`/${page}/`);
+const pageNames = { terms: { en: 'Terms of Service', es: 'Términos de Servicio', pt: 'Termos de Serviço' }, policy: { en: 'Privacy Policy', es: 'Política de Privacidad', pt: 'Política de Privacidade' }, refunds: { en: 'Refund Policy', es: 'Política de Reembolso', pt: 'Política de Reembolso' } };
+const pageName = pageNames[page][locale];
 
 function backLabel() {
   if (locale === 'es') return '← Volver al Inicio';
@@ -28,6 +33,16 @@ function backLabel() {
 ---
 
 <section class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 px-6">
+
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + localPath('/') },
+      { '@type': 'ListItem', position: 2, name: pageName, item: siteUrl + pagePath },
+    ],
+  })} />
   <!-- Ambient background -->
   <div class="absolute inset-0 bg-khan-bg-secondary/50" />
   <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 right-0" />

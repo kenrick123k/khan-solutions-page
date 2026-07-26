@@ -36,12 +36,12 @@ const text = t(locale);
 
     <!-- Logo -->
     <div class="stagger-item mb-8">
-      <img src="/minimal-logo.svg" alt="VETEK" class="mx-auto h-24 w-auto animate-float drop-shadow-[0_0_40px_rgba(79,178,134,0.15)]" width="96" height="96" />
+      <img src="/minimal-logo.svg" alt="VETEK" class="mx-auto h-24 w-auto animate-float drop-shadow-[0_0_40px_rgba(79,178,134,0.15)]" width="96" height="96" fetchpriority="high" />
     </div>
 
     <!-- Headline -->
     <h1 class="stagger-item text-5xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight mb-6">
-      <span class="text-khan-text" data-i18n="hero.headline">{text.hero.headline}</span><br />
+      <span class="text-khan-text" data-i18n="hero.headline">{text.hero.headline}</span>{' '}
       <span class="gradient-text" data-i18n="hero.headlineAccent">{text.hero.headlineAccent}</span>
     </h1>
 

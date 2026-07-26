@@ -1,0 +1,144 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const postSlug = post.id;
+const siteUrl = 'https://khan-solutions.com';
+---
+
+<BaseLayout
+  title={`${post.data.title} — KHAN Solutions Blog`}
+  description={post.data.description}
+  ogTitle={post.data.title}
+  ogDescription={post.data.description}
+>
+  <Fragment slot="head">
+    <meta name="author" content={post.data.author} />
+    <meta property="article:published_time" content={post.data.date.toISOString()} />
+    {post.data.updated && <meta property="article:modified_time" content={post.data.updated.toISOString()} />}
+    {post.data.tags.map(tag => <meta property="article:tag" content={tag} />)}
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={post.data.title} />
+    <meta name="twitter:description" content={post.data.description} />
+    <link rel="canonical" href={`${siteUrl}/blog/${postSlug}/`} />
+    <!-- Article Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.date.toISOString(),
+      dateModified: (post.data.updated || post.data.date).toISOString(),
+      author: { '@type': 'Organization', name: post.data.author },
+      publisher: { '@type': 'Organization', name: 'KHAN Solutions', url: siteUrl },
+      image: post.data.image ? `${siteUrl}${post.data.image}` : `${siteUrl}/og-image.png`,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteUrl}/blog/${postSlug}/` },
+    })} />
+  </Fragment>
+
+  <main class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 px-6">
+    <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+    <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 right-0" />
+
+    <article class="relative z-10 mx-auto max-w-3xl">
+      <!-- Header -->
+      <header class="mb-12">
+        <div class="flex flex-wrap items-center gap-3 text-sm text-khan-text-muted mb-4">
+          <time datetime={post.data.date.toISOString().split('T')[0]}>
+            {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          <span>by {post.data.author}</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-bold font-display text-khan-text mb-4 leading-tight">
+          {post.data.title}
+        </h1>
+        <p class="text-xl text-khan-text-secondary leading-relaxed">
+          {post.data.description}
+        </p>
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-4">
+            {post.data.tags.map(tag => (
+              <span class="px-3 py-1 rounded-full bg-khan-accent/10 text-khan-accent text-xs font-medium">{tag}</span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <!-- Content -->
+      <div class="card-glass rounded-2xl p-8 sm:p-10 prose-custom">
+        <Content />
+      </div>
+
+      <!-- Back -->
+      <div class="text-center mt-12">
+        <a href="/blog/" class="btn-outline text-sm">← Back to Blog</a>
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .prose-custom {
+    color: var(--khan-text-secondary);
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+  .prose-custom :global(h2) {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--khan-text);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .prose-custom :global(h3) {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--khan-text);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .prose-custom :global(p) {
+    margin-bottom: 1.25rem;
+  }
+  .prose-custom :global(ul), .prose-custom :global(ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+  .prose-custom :global(li) {
+    margin-bottom: 0.5rem;
+  }
+  .prose-custom :global(strong) {
+    color: var(--khan-text);
+    font-weight: 600;
+  }
+  .prose-custom :global(a) {
+    color: var(--khan-accent);
+    text-decoration: underline;
+  }
+  .prose-custom :global(blockquote) {
+    border-left: 3px solid var(--khan-accent);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: var(--khan-text-muted);
+    font-style: italic;
+  }
+  .prose-custom :global(code) {
+    background: var(--khan-accent-light);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+</style>

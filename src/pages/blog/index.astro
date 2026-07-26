@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog'))
+  .filter(p => p.data.lang === 'en')
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout
+  title="KHAN Solutions Blog — Veterinary Practice Insights"
+  description="Guides, insights, and best practices for veterinary practice management — inventory, clinical records, and clinic operations."
+  ogTitle="KHAN Solutions Blog — Veterinary Practice Insights"
+  ogDescription="Expert guides on veterinary practice management, inventory software, clinical records, and clinic operations."
+>
+  <main class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 px-6 min-h-screen">
+    <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+    <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 right-0" />
+
+    <div class="relative z-10 mx-auto max-w-4xl">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+          <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+          <span>Veterinary Practice Insights</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-bold font-display mb-4">
+          <span class="text-khan-text">KHAN Solutions</span>{' '}
+          <span class="gradient-text">Blog</span>
+        </h1>
+        <p class="text-lg text-khan-text-secondary max-w-xl mx-auto">
+          Guides, insights, and best practices for veterinary practice management — inventory, clinical records, and clinic operations.
+        </p>
+      </div>
+
+      <div class="grid gap-8">
+        {posts.length === 0 ? (
+          <div class="card-glass rounded-2xl p-12 text-center">
+            <p class="text-khan-text-secondary">Articles coming soon. Subscribe to stay updated.</p>
+          </div>
+        ) : (
+          posts.map((post) => (
+            <article class="card-glass rounded-2xl p-8 sm:p-10 transition-all duration-300 hover:border-khan-accent/30">
+              <a href={`/blog/${post.id}/`} class="group">
+                <div class="flex flex-wrap items-center gap-3 text-sm text-khan-text-muted mb-3">
+                  <time datetime={post.data.date.toISOString().split('T')[0]}>
+                    {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </time>
+                  {post.data.tags.map(tag => (
+                    <span class="px-2 py-0.5 rounded-full bg-khan-accent/10 text-khan-accent text-xs">{tag}</span>
+                  ))}
+                </div>
+                <h2 class="text-2xl font-bold font-display text-khan-text group-hover:text-khan-accent-light transition-colors mb-3">
+                  {post.data.title}
+                </h2>
+                <p class="text-khan-text-secondary leading-relaxed">
+                  {post.data.description}
+                </p>
+                <span class="inline-flex items-center gap-1 text-khan-accent text-sm font-medium mt-4 group-hover:gap-2 transition-all">
+                  Read article <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            </article>
+          ))
+        )}
+      </div>
+    </div>
+  </main>
+</BaseLayout>
