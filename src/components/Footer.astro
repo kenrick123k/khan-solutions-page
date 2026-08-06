@@ -45,6 +45,31 @@ function localPath(path: string) {
       <a href={localPath('/policy/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.privacy">{text.footer.privacy}</a>
       <span class="text-khan-border">|</span>
       <a href={localPath('/refunds/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.refunds">{text.footer.refunds}</a>
+      <span class="text-khan-border">|</span>
+      <a href={localPath('/dpa/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.dpa">{text.footer.dpa}</a>
+      <span class="text-khan-border">|</span>
+      <a href={localPath('/aup/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.aup">{text.footer.aup}</a>
+      <span class="text-khan-border">|</span>
+      <a href={localPath('/cookies/')} class="hover:text-khan-accent transition-colors" data-i18n="footer.cookies">{text.footer.cookies}</a>
+      <span class="text-khan-border">|</span>
+      <button
+        type="button"
+        id="vctk-cookie-settings"
+        class="cursor-pointer transition-colors hover:text-khan-accent"
+        data-i18n="footer.cookieSettings"
+      >
+        {text.footer.cookieSettings}
+      </button>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  // Re-open the cookie consent banner from the footer.
+  document.addEventListener('click', function (e) {
+    if (!(e.target instanceof Element)) return;
+    if (e.target.closest('#vctk-cookie-settings') && window.__vctkConsent && window.__vctkConsent.showBanner) {
+      window.__vctkConsent.showBanner();
+    }
+  });
+</script>

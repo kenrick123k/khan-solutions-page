@@ -11,7 +11,7 @@ function detectLocale(pathname: string): Locale {
 const locale = detectLocale(Astro.url.pathname);
 const text = t(locale);
 
-const ICON_KEYS = ['inventory', 'clinical', 'pos', 'analytics', 'realtime', 'security'] as const;
+const ICON_KEYS = ['inventory', 'pos', 'clinical', 'realtime', 'analytics', 'security'] as const;
 ---
 
 <section id="features" class="relative py-24 sm:py-32 px-6">
@@ -24,6 +24,9 @@ const ICON_KEYS = ['inventory', 'clinical', 'pos', 'analytics', 'realtime', 'sec
       </h2>
       <p class="text-khan-text-secondary text-lg max-w-2xl mx-auto" data-i18n="features.subtitle">
         {text.features.subtitle}
+      </p>
+      <p class="text-khan-text-secondary/90 text-base leading-relaxed max-w-3xl mx-auto mt-6" data-i18n="features.summary">
+        {text.features.summary}
       </p>
     </div>
 

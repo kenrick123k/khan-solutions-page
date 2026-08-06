@@ -1,0 +1,412 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const content = (text as any).earlyAccess;
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
+const hero = content.hero;
+const benefits = content.benefits;
+const form = content.form;
+const faq = content.faq;
+const bottomCta = content.bottomCta;
+
+const vetCountOptions: string[] = form.vetCountOptions;
+
+/* Benefits icons (order: price, early access, support, influence) */
+const BENEFIT_ICONS = [
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.4 2.5 1.5-1 1.5-2.5 1.5-2.5.4-2.5 1.5 1 1.5 2.5 1.5 2.5-.4 2.5-1.5"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/><path d="M8.5 9.5h7M8.5 13h4"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>',
+];
+
+const siteUrl = 'https://khan-solutions.com';
+const pageNames = { en: 'Early Access', es: 'Acceso Anticipado', pt: 'Acesso Antecipado' };
+const pagePath = localPath('/early-access/');
+---
+
+<!-- BreadcrumbList + FAQPage Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + localPath('/') },
+    { '@type': 'ListItem', position: 2, name: pageNames[locale], item: siteUrl + pagePath },
+  ],
+})} />
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.items.map((item: { q: string; a: string }) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+})} />
+
+<!-- Hero -->
+<section id="early-access-hero" class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-grid" />
+  <div class="glow-orb w-[500px] h-[500px] bg-khan-accent/6 -top-20 -right-40" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/5 bottom-10 left-0" />
+
+  <div class="relative z-10 mx-auto max-w-4xl text-center">
+    <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+      <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+      <span>{hero.badge}</span>
+    </div>
+
+    <h1 class="reveal-section text-4xl sm:text-6xl lg:text-6xl font-bold font-display leading-tight mb-6">
+      <span class="text-khan-text">{hero.title}</span>{' '}
+      <span class="gradient-text">{hero.titleAccent}</span>
+    </h1>
+
+    <p class="reveal-section text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto leading-relaxed">
+      {hero.subtitle}
+    </p>
+
+    <!-- Urgency banner -->
+    <div class="reveal-section mt-8 inline-flex items-center gap-3 px-5 py-3 rounded-full border border-khan-accent/40 bg-khan-accent/10">
+      <span class="w-2.5 h-2.5 rounded-full bg-khan-accent animate-glow-pulse shrink-0" />
+      <p class="text-sm font-semibold text-khan-accent">{hero.urgency}</p>
+    </div>
+
+    <div class="reveal-section mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#early-access-form" class="btn-primary text-base px-8">
+        {form.submit}
+        <Fragment set:html={Icons.arrowRight} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits -->
+<section id="early-access-benefits" class="relative py-16 sm:py-20 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/30" />
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{benefits.title}</span>{' '}
+        <span class="gradient-text">{benefits.titleAccent}</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {benefits.items.map((item: any, i: number) => (
+        <div class="benefit-card card-glass rounded-3xl p-7 flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent flex items-center justify-center mb-5" aria-hidden="true">
+            <Fragment set:html={BENEFIT_ICONS[i] || BENEFIT_ICONS[0]} />
+          </div>
+          <h3 class="text-base font-bold font-display text-khan-text mb-3">{item.title}</h3>
+          <p class="text-sm text-khan-text-secondary leading-relaxed">{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Application Form -->
+<section id="early-access-form" class="relative py-20 sm:py-28 px-6">
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 left-1/2 -translate-x-1/2" />
+
+  <div class="relative z-10 mx-auto max-w-2xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{form.title}</span>{' '}
+        <span class="gradient-text">{form.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-xl mx-auto">{form.subtitle}</p>
+    </div>
+
+    <div class="reveal-section card-glass rounded-2xl p-8 sm:p-10">
+      <!-- Success state (hidden by default) -->
+      <div id="early-access-success" class="hidden text-center">
+        <div class="w-16 h-16 mx-auto rounded-full bg-khan-accent/10 border border-khan-accent/30 flex items-center justify-center mb-6" aria-hidden="true">
+          <svg class="w-8 h-8 text-khan-accent" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="text-2xl font-bold font-display mb-3"><span class="gradient-text">{form.successTitle}</span></h3>
+        <p class="text-khan-text-secondary leading-relaxed mb-6">{form.successText}</p>
+        <p class="text-sm text-khan-text-secondary mb-4">{form.successWhatsApp}</p>
+        <a
+          href="https://wa.me/50760000000?text=Hola%2C%20quiero%20confirmar%20mi%20cupo%20en%20la%20beta%20de%20VETEK"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-outline text-base px-8 justify-center"
+        >
+          WhatsApp
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 01-12.4 7.5L3 21l2-5.5A8.5 8.5 0 1121 11.5z"/><path d="M9 9.5c.5 2.5 2.5 4.5 5 5l1-1.5 2 1"/></svg>
+        </a>
+        <button type="button" id="early-access-reset" class="mt-6 text-sm text-khan-text-muted hover:text-khan-accent cursor-pointer transition-colors">
+          ← {form.submit}
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form id="early-access-form-el" class="space-y-5">
+        <!-- Name + Email -->
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="ea-name" class="block text-sm font-medium text-khan-text-secondary mb-2">{form.name}</label>
+            <input id="ea-name" type="text" name="name" required minlength="2" maxlength="120"
+              placeholder={form.namePlaceholder}
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+          <div>
+            <label for="ea-email" class="block text-sm font-medium text-khan-text-secondary mb-2">{form.email}</label>
+            <input id="ea-email" type="email" name="email" required maxlength="254"
+              placeholder={form.emailPlaceholder}
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+        </div>
+
+        <!-- Clinic + Phone -->
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="ea-clinic" class="block text-sm font-medium text-khan-text-secondary mb-2">{form.clinic}</label>
+            <input id="ea-clinic" type="text" name="clinic" required minlength="2" maxlength="200"
+              placeholder={form.clinicPlaceholder}
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+          <div>
+            <label for="ea-phone" class="block text-sm font-medium text-khan-text-secondary mb-2">{form.phone}</label>
+            <input id="ea-phone" type="tel" name="phone" required maxlength="30"
+              placeholder={form.phonePlaceholder}
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+        </div>
+
+        <!-- Country + Vet count -->
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="ea-country" class="block text-sm font-medium text-khan-text-secondary mb-2">{form.country}</label>
+            <input id="ea-country" type="text" name="country" required minlength="2" maxlength="100"
+              placeholder={form.countryPlaceholder}
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text placeholder:text-khan-text-muted/50 focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all" />
+          </div>
+          <div>
+            <label for="ea-vet-count" class="block text-sm font-medium text-khan-text-secondary mb-2">{form.vetCount}</label>
+            <select id="ea-vet-count" name="vetCount" required
+              class="w-full px-4 py-3 rounded-xl bg-khan-bg border border-khan-border text-khan-text focus:outline-none focus:border-khan-accent/50 focus:ring-1 focus:ring-khan-accent/30 transition-all appearance-none cursor-pointer">
+              {vetCountOptions.map((opt: string) => (
+                <option value={Number.parseInt(opt, 10) || opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="early-access-submit-btn" class="btn-primary w-full justify-center text-base">
+          <span id="early-access-submit-text">{form.submit}</span>
+          <span id="early-access-submit-spinner" class="hidden"><Fragment set:html={Icons.spinner} /></span>
+        </button>
+
+        <!-- Privacy note -->
+        <p class="text-center text-xs text-khan-text-muted mt-3">
+          {form.privacyNote}{' '}
+          <a href={localPath('/policy/')} class="text-khan-accent font-medium hover:underline transition-colors">
+            {text.footer.privacy}
+          </a>
+        </p>
+
+        <!-- Status messages -->
+        <div id="early-access-error" class="hidden p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+          <span>{form.error}</span>{' '}
+          <a href="mailto:administration@khan-solutions.com" class="font-semibold underline">administration@khan-solutions.com</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="early-access-faq" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/30" />
+  <div class="relative z-10 mx-auto max-w-3xl">
+    <div class="text-center mb-12">
+      <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{faq.title}</span>{' '}
+        <span class="gradient-text">{faq.titleAccent}</span>
+      </h2>
+      <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto">
+        {faq.subtitle}
+      </p>
+    </div>
+    <div class="space-y-4">
+      {faq.items.map((item: { q: string; a: string }, i: number) => (
+        <div class="reveal-section faq-item card-glass rounded-2xl overflow-hidden transition-all duration-300">
+          <button
+            type="button"
+            id={`ea-faq-toggle-${i}`}
+            class="faq-toggle w-full flex items-center justify-between gap-4 p-6 text-left cursor-pointer"
+            aria-expanded="false"
+            aria-controls={`ea-faq-panel-${i}`}
+          >
+            <span class="text-lg font-bold font-display text-khan-text">{item.q}</span>
+            <span class="faq-icon shrink-0 text-khan-text-muted"><Fragment set:html={Icons.chevronDown} /></span>
+          </button>
+          <div class="faq-panel" id={`ea-faq-panel-${i}`} role="region" aria-labelledby={`ea-faq-toggle-${i}`}>
+            <div class="faq-panel-inner px-6 pb-6">
+              <p class="text-khan-text-secondary leading-relaxed">{item.a}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section id="early-access-cta" class="relative py-20 sm:py-28 px-6">
+  <div class="relative z-10 mx-auto max-w-2xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+      <span class="text-khan-text">{bottomCta.title}</span>{' '}
+      <span class="gradient-text">{bottomCta.titleAccent}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary mb-8 max-w-xl mx-auto">
+      {bottomCta.subtitle}
+    </p>
+    <a href="#early-access-form" class="reveal-section btn-primary text-base px-10">
+      {bottomCta.button}
+      <Fragment set:html={Icons.arrowRight} />
+    </a>
+  </div>
+</section>
+
+<style>
+  /* ── FAQ accordion ── */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq-panel-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .faq-item.open .faq-panel {
+    grid-template-rows: 1fr;
+  }
+  .faq-icon {
+    transition: transform 0.35s ease, color 0.35s ease;
+  }
+  .faq-item.open .faq-icon {
+    transform: rotate(180deg);
+    color: #4FB286;
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 0.7, delay: (i % 6) * 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' },
+    });
+  });
+
+  gsap.utils.toArray('.benefit-card').forEach((card, i) => {
+    gsap.fromTo(card, { opacity: 0, y: 40 }, {
+      opacity: 1, y: 0, duration: 0.75, delay: i * 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 95%' },
+    });
+  });
+
+  /* ── FAQ accordion (one open at a time) ── */
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach((item) => {
+    const toggle = item.querySelector('.faq-toggle');
+    toggle.addEventListener('click', () => {
+      const willOpen = !item.classList.contains('open');
+      faqItems.forEach((other) => {
+        other.classList.remove('open');
+        other.querySelector('.faq-toggle').setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        item.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* ── Form submission → POST /api/early-access ── */
+  const form = document.getElementById('early-access-form-el') as HTMLFormElement;
+  const submitBtn = document.getElementById('early-access-submit-btn') as HTMLButtonElement;
+  const submitText = document.getElementById('early-access-submit-text')!;
+  const submitSpinner = document.getElementById('early-access-submit-spinner')!;
+  const successDiv = document.getElementById('early-access-success')!;
+  const errorDiv = document.getElementById('early-access-error')!;
+  const resetBtn = document.getElementById('early-access-reset');
+
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3100';
+
+  function showSuccess() {
+    form.classList.add('hidden');
+    successDiv.classList.remove('hidden');
+    successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  resetBtn?.addEventListener('click', () => {
+    successDiv.classList.add('hidden');
+    form.classList.remove('hidden');
+    form.reset();
+    window.scrollTo({ top: form.offsetTop - 120, behavior: 'smooth' });
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitText.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+    errorDiv.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const body: Record<string, unknown> = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      clinic: formData.get('clinic'),
+      phone: formData.get('phone'),
+      country: formData.get('country'),
+      vetCount: formData.get('vetCount'),
+      language: document.documentElement.getAttribute('data-lang') || 'en',
+    };
+
+    try {
+      const res = await fetch(`${API_URL}/api/early-access`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        form.reset();
+        showSuccess();
+      } else {
+        errorDiv.classList.remove('hidden');
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch {
+      errorDiv.classList.remove('hidden');
+      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } finally {
+      submitBtn.disabled = false;
+      submitText.classList.remove('hidden');
+      submitSpinner.classList.add('hidden');
+    }
+  });
+</script>

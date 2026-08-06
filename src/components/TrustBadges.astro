@@ -1,0 +1,26 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+
+const TRUST_ICONS = ['security', 'database', 'activity', 'headset'] as const;
+---
+
+<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+  {text.trust.items.map((item, i) => (
+    <div class="flex items-center gap-2 text-sm text-khan-text-secondary">
+      <span class="icon-16 w-4 h-4 shrink-0 text-khan-accent">
+        <Fragment set:html={Icons[TRUST_ICONS[i] ?? 'security']} />
+      </span>
+      <span data-i18n={`trust.items.${i}.label`}>{item.label}</span>
+    </div>
+  ))}
+</div>

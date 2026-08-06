@@ -3,6 +3,7 @@ import { CONFIG } from '../lib/config';
 import { Icons } from '../lib/icons';
 import { t } from '../i18n/index';
 import type { Locale } from '../i18n/index';
+import TrustBadges from './TrustBadges.astro';
 
 function detectLocale(pathname: string): Locale {
   if (pathname.startsWith('/es/')) return 'es';
@@ -12,9 +13,15 @@ function detectLocale(pathname: string): Locale {
 const locale = detectLocale(Astro.url.pathname);
 const text = t(locale);
 
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
 const projectTypes = [
   { value: 'DEMO', i18n: 'contact.form.projectTypes.DEMO', default: text.contact.form.projectTypes.DEMO },
+  { value: 'FREE_TRIAL', i18n: 'contact.form.projectTypes.FREE_TRIAL', default: text.contact.form.projectTypes.FREE_TRIAL },
   { value: 'PRICING', i18n: 'contact.form.projectTypes.PRICING', default: text.contact.form.projectTypes.PRICING },
+  { value: 'MIGRATION', i18n: 'contact.form.projectTypes.MIGRATION', default: text.contact.form.projectTypes.MIGRATION },
   { value: 'IMPLEMENTATION', i18n: 'contact.form.projectTypes.IMPLEMENTATION', default: text.contact.form.projectTypes.IMPLEMENTATION },
   { value: 'CONSULTING', i18n: 'contact.form.projectTypes.CONSULTING', default: text.contact.form.projectTypes.CONSULTING },
   { value: 'SUPPORT', i18n: 'contact.form.projectTypes.SUPPORT', default: text.contact.form.projectTypes.SUPPORT },
@@ -105,6 +112,24 @@ const projectTypes = [
           <span id="contact-submit-text" data-i18n="contact.form.submit">{text.contact.form.submit}</span>
           <span id="contact-submit-spinner" class="hidden"><Fragment set:html={Icons.spinner} /></span>
         </button>
+
+        <!-- Microcopy -->
+        <p class="text-center text-sm text-khan-text-muted" data-i18n="contact.form.microcopy">
+          {text.contact.form.microcopy}
+        </p>
+
+        <!-- Privacy note -->
+        <p class="text-center text-xs text-khan-text-muted mt-3">
+          <span data-i18n="contact.form.privacyNote">{text.contact.form.privacyNote}</span>{' '}
+          <a href={localPath('/policy/')} class="text-khan-accent font-medium hover:underline transition-colors">
+            {text.footer.privacy}
+          </a>
+        </p>
+
+        <!-- Trust badges -->
+        <div class="pt-2">
+          <TrustBadges />
+        </div>
 
         <!-- Status messages -->
         <div id="contact-success" class="hidden p-4 rounded-xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent text-sm text-center" data-i18n="contact.form.success">

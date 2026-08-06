@@ -28,17 +28,21 @@ function localPath(path: string) {
     </a>
 
     <!-- Desktop Links -->
-    <div class="hidden md:flex items-center gap-6">
-      <a href={`${localPath('/')}#features`} data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.features}</a>
+    <div class="hidden lg:flex items-center gap-5">
+      <a href={localPath('/features/')} data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.features}</a>
       <a href={`${localPath('/')}#modules`} data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.modules}</a>
+      <a href={localPath('/comparison/')} data-i18n="nav.compare" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.compare}</a>
       <a href={localPath('/pricing/')} data-i18n="nav.pricing" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.pricing}</a>
+      <a href={localPath('/about/')} data-i18n="nav.about" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.about}</a>
       <a href={localPath('/blog/')} data-i18n="nav.blog" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.blog || 'Blog'}</a>
       <a href={`${localPath('/')}#contact`} data-i18n="nav.contact" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent transition-colors duration-200">{text.nav.contact}</a>
+      <a href={localPath('/early-access/')} data-i18n="nav.earlyAccess" class="text-sm font-semibold text-khan-accent border border-khan-accent/30 rounded-full px-4 py-1.5 hover:bg-khan-accent/10 transition-colors duration-200">{text.nav.earlyAccess}</a>
       <LangSwitcher />
+      <a href={`${localPath('/')}#contact`} class="btn-primary text-sm px-5 py-2.5" data-i18n="nav.cta">{text.nav.cta}</a>
     </div>
 
     <!-- Mobile -->
-    <div class="flex md:hidden items-center gap-3">
+    <div class="flex lg:hidden items-center gap-3">
       <LangSwitcher />
       <button id="mobile-menu-btn" class="flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
         <span class="block w-6 h-0.5 bg-khan-text transition-transform duration-300" />
@@ -49,13 +53,17 @@ function localPath(path: string) {
   </div>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-khan-bg/95 backdrop-blur-xl border-b border-khan-border">
+  <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 right-0 bg-khan-bg/95 backdrop-blur-xl border-b border-khan-border">
     <div class="px-6 py-4 flex flex-col gap-3">
-      <a href={`${localPath('/')}#features`} data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.features}</a>
+      <a href={localPath('/features/')} data-i18n="nav.features" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.features}</a>
       <a href={`${localPath('/')}#modules`} data-i18n="nav.modules" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.modules}</a>
+      <a href={localPath('/comparison/')} data-i18n="nav.compare" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.compare}</a>
       <a href={localPath('/pricing/')} data-i18n="nav.pricing" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.pricing}</a>
+      <a href={localPath('/about/')} data-i18n="nav.about" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.about}</a>
       <a href={localPath('/blog/')} data-i18n="nav.blog" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.blog || 'Blog'}</a>
-      <a href={`${localPath('/')}#contact`} data-i18n="nav.contact" class="btn-primary text-sm text-center mt-2">{text.nav.contact}</a>
+      <a href={`${localPath('/')}#contact`} data-i18n="nav.contact" class="text-sm font-medium text-khan-text-secondary hover:text-khan-accent py-2 transition-colors">{text.nav.contact}</a>
+      <a href={localPath('/early-access/')} data-i18n="nav.earlyAccess" class="text-sm font-semibold text-khan-accent border border-khan-accent/30 rounded-full px-4 py-2 text-center hover:bg-khan-accent/10 transition-colors">{text.nav.earlyAccess}</a>
+      <a href={`${localPath('/')}#contact`} data-i18n="nav.cta" class="btn-primary text-sm text-center mt-2">{text.nav.cta}</a>
     </div>
   </div>
 </nav>

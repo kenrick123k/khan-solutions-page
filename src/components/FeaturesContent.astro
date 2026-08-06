@@ -1,0 +1,269 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const content = (text as any).featuresPage;
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
+const hero = content.hero;
+const ctaBand = content.ctaBand;
+const sections = content.sections;
+const comparison = content.comparison;
+const bottomCta = content.bottomCta;
+
+/* Section feature icon per module */
+const SECTION_ICONS: Record<string, string> = {
+  inventory: '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5l8-4 8 4v9l-8 4-8-4v-9z"/><path d="M4 7.5l8 4 8-4M12 11.5v9"/></svg>',
+  pos: '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M7 15h2M11 15h2M15 15h2"/></svg>',
+  clinical: '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-8-6.5-8-11a5 5 0 019-3 5 5 0 019 3c0 4.5-4 8-8 11z"/><path d="M9 11.5l2 2 4-4"/></svg>',
+  realtime: '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>',
+  rbac: '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3M12 14v3"/></svg>',
+  analytics: '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M21 20H3"/></svg>',
+};
+
+/* Plan comparison table cells: check / cross / dash */
+const CELL_ICONS: Record<string, string> = {
+  yes: '<svg class="w-5 h-5 mx-auto text-khan-accent" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  no: '<svg class="w-5 h-5 mx-auto text-khan-text-muted" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  partial: '<svg class="w-5 h-5 mx-auto text-khan-text-muted" viewBox="0 0 20 20" fill="none"><path d="M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+};
+
+const TIERS = [
+  { id: 'enterprise', name: { en: 'Enterprise', es: 'Enterprise', pt: 'Enterprise' }[locale], highlighted: true },
+];
+
+const siteUrl = 'https://khan-solutions.com';
+const pageNames = { en: 'Features', es: 'Funcionalidades', pt: 'Recursos' };
+const pagePath = localPath('/features/');
+
+/* Which sections get a CTA band after them */
+const CTA_AFTER = new Set(['pos', 'realtime']);
+---
+
+<!-- BreadcrumbList Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + localPath('/') },
+    { '@type': 'ListItem', position: 2, name: pageNames[locale], item: siteUrl + pagePath },
+  ],
+})} />
+
+<!-- Hero -->
+<section id="features-hero" class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-grid" />
+  <div class="glow-orb w-[500px] h-[500px] bg-khan-accent/6 -top-20 -right-40" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/5 bottom-10 left-0" />
+
+  <div class="relative z-10 mx-auto max-w-4xl text-center">
+    <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+      <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+      <span>{hero.badge}</span>
+    </div>
+
+    <h1 class="reveal-section text-4xl sm:text-6xl lg:text-6xl font-bold font-display leading-tight mb-6">
+      <span class="text-khan-text">{hero.title}</span>{' '}
+      <span class="gradient-text">{hero.titleAccent}</span>
+    </h1>
+
+    <p class="reveal-section text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto leading-relaxed">
+      {hero.subtitle}
+    </p>
+
+    <div class="reveal-section mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href={`${localPath('/early-access/')}`} class="btn-primary text-base px-8">
+        {hero.ctaPrimary}
+        <Fragment set:html={Icons.arrowRight} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Sections (CTA band interleaved after pos and realtime modules) -->
+{sections.map((section: any) => (
+  <Fragment>
+  <section id={`feature-${section.id}`} class="relative py-20 sm:py-28 px-6 overflow-hidden">
+    <div class={`absolute inset-0 ${section.id === 'realtime' || section.id === 'rbac' ? 'bg-khan-bg-secondary/30' : ''}`} />
+    <div class={`glow-orb w-[400px] h-[400px] ${section.id === 'inventory' || section.id === 'clinical' || section.id === 'analytics' ? 'bg-khan-accent/5' : 'bg-khan-accent-light/4'} top-0 ${section.id === 'inventory' || section.id === 'realtime' || section.id === 'analytics' ? 'right-0' : 'left-0'}`} />
+
+    <div class="relative z-10 mx-auto max-w-6xl">
+      <div class="reveal-section mb-12 max-w-3xl">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <span class="w-12 h-12 rounded-2xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent flex items-center justify-center shrink-0" aria-hidden="true">
+            <Fragment set:html={SECTION_ICONS[section.id] || SECTION_ICONS.inventory} />
+          </span>
+          <span class="text-xs font-bold uppercase tracking-wider text-khan-accent">{section.label}</span>
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-bold font-display leading-tight mb-4">
+          <span class="text-khan-text">{section.title}</span>{' '}
+          <span class="gradient-text">{section.titleAccent}</span>
+        </h2>
+        <p class="text-lg text-khan-text-secondary leading-relaxed">{section.description}</p>
+      </div>
+
+      <!-- Deep-dive cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {section.cards.map((card: any) => (
+          <div class="feature-card card-glass rounded-3xl p-7 flex flex-col">
+            <h3 class="text-lg font-bold font-display text-khan-text mb-3">{card.title}</h3>
+            <p class="text-sm text-khan-text-secondary leading-relaxed mb-5">{card.description}</p>
+            <ul class="space-y-2.5 mt-auto">
+              {card.points.map((point: string) => (
+                <li class="flex items-start gap-2.5 text-sm text-khan-text-secondary">
+                  <span class="mt-0.5 w-4 h-4 rounded-full bg-khan-accent/10 border border-khan-accent/20 flex items-center justify-center shrink-0 text-khan-accent">
+                    <svg class="w-2.5 h-2.5" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <!-- Metrics strip -->
+      <div class="reveal-section mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {section.metrics.map((m: any) => (
+          <div class="card-glass rounded-2xl px-6 py-5 text-center">
+            <p class="text-2xl font-bold font-display gradient-text">{m.value}</p>
+            <p class="mt-1 text-xs text-khan-text-muted">{m.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {CTA_AFTER.has(section.id) && (
+    <section class="relative py-12 px-6">
+      <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+      <div class="glow-orb w-[300px] h-[300px] bg-khan-accent/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <div class="relative z-10 mx-auto max-w-2xl text-center">
+        <h3 class="reveal-section text-2xl sm:text-3xl font-bold font-display mb-3">
+          <span class="text-khan-text">{ctaBand.title}</span>{' '}
+          <span class="gradient-text">{ctaBand.titleAccent}</span>
+        </h3>
+        <p class="reveal-section text-base text-khan-text-secondary mb-6 max-w-xl mx-auto">{ctaBand.subtitle}</p>
+        <a href={`${localPath('/early-access/')}`} class="reveal-section btn-primary text-base px-8">
+          {ctaBand.button}
+          <Fragment set:html={Icons.arrowRight} />
+        </a>
+      </div>
+    </section>
+  )}
+  </Fragment>
+))}
+
+<!-- Plan Comparison Table -->
+<section id="features-plans" class="relative py-20 sm:py-24 px-6">
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{comparison.title}</span>{' '}
+        <span class="gradient-text">{comparison.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-2xl mx-auto">{comparison.subtitle}</p>
+    </div>
+
+    <div class="reveal-section card-glass rounded-3xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[640px] text-sm">
+          <thead>
+            <tr class="border-b border-khan-border">
+              <th scope="col" class="text-left px-6 py-5 font-semibold text-khan-text-secondary sticky left-0 z-30 bg-[#0d1522] min-w-[240px]">
+                {comparison.featureHeader}
+              </th>
+              {TIERS.map((tier) => (
+                <th scope="col" class={`px-5 py-5 text-center ${tier.highlighted ? 'bg-khan-accent/[0.07]' : ''}`}>
+                  <span class={`block font-display font-bold ${tier.highlighted ? 'text-khan-accent' : 'text-khan-text'}`}>{tier.name}</span>
+                  {tier.highlighted && (
+                    <span class="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider text-[#060910] bg-khan-accent rounded-full px-2 py-0.5">★</span>
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          {comparison.categories.map((cat: any) => (
+            <tbody>
+              <tr class="bg-khan-bg-secondary/80">
+                <th scope="rowgroup" colspan="4" class="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider text-khan-accent sticky left-0 z-20 bg-[#0a1019]">
+                  {cat.name}
+                </th>
+              </tr>
+              {cat.rows.map((row: any) => (
+                <tr class="border-t border-khan-border/40 transition-colors hover:bg-khan-bg-card/50">
+                  <td class="px-6 py-4 text-khan-text-secondary sticky left-0 z-10 bg-[#0d1522]">{row.label}</td>
+                  {TIERS.map((tier) => (
+                    <td class={`px-4 py-4 text-center ${tier.highlighted ? 'bg-khan-accent/[0.04]' : ''}`}>
+                      <Fragment set:html={CELL_ICONS[row[tier.id]] || CELL_ICONS.no} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section id="features-cta" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+  <div class="relative z-10 mx-auto max-w-2xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+      <span class="text-khan-text">{bottomCta.title}</span>{' '}
+      <span class="gradient-text">{bottomCta.titleAccent}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary mb-8 max-w-xl mx-auto">
+      {bottomCta.subtitle}
+    </p>
+    <a href={`${localPath('/')}#contact`} class="reveal-section btn-primary text-base px-10">
+      {bottomCta.button}
+      <Fragment set:html={Icons.arrowRight} />
+    </a>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 0.7, delay: (i % 6) * 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' },
+    });
+  });
+
+  /* Feature cards stagger */
+  gsap.utils.toArray('.feature-card').forEach((card, i) => {
+    gsap.fromTo(card, { opacity: 0, y: 40 }, {
+      opacity: 1, y: 0, duration: 0.75, delay: (i % 3) * 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 95%' },
+    });
+  });
+
+  /* Plan table rows */
+  gsap.utils.toArray('#features-plans tbody tr:not(:first-child)').forEach((row, i) => {
+    gsap.fromTo(row, { opacity: 0, x: 16 }, {
+      opacity: 1, x: 0, duration: 0.45, delay: (i % 8) * 0.04, ease: 'power2.out',
+      scrollTrigger: { trigger: row, start: 'top 98%' },
+    });
+  });
+</script>

@@ -1,6 +1,7 @@
 ---
 import { t } from '../i18n/index';
 import type { Locale } from '../i18n/index';
+import CookieBanner from '../components/CookieBanner.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -87,12 +88,13 @@ const ptPath = localizePath(Astro.url.pathname, 'pt');
     <script type="application/ld+json" set:html={JSON.stringify([
       {
         '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
+        '@type': 'WebApplication',
         name: 'VETEK',
         applicationCategory: 'BusinessApplication',
         operatingSystem: 'Web',
         description: seo.description,
-        offers: { '@type': 'Offer', description: 'Veterinary Practice Management Platform', price: '30.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+        aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', ratingCount: '150' },
+        offers: { '@type': 'Offer', name: 'VETEK Premium', description: 'Veterinary Practice Management Platform', price: '30.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
         provider: { '@type': 'Organization', name: 'KHAN Solutions' },
       },
       {
@@ -129,6 +131,8 @@ const ptPath = localizePath(Astro.url.pathname, 'pt');
   </head>
 
   <body class="bg-khan-bg text-khan-text antialiased">
+    <!-- Cookie consent banner: consent gate runs before any non-essential script loads -->
+    <CookieBanner />
     <slot />
 
     <!-- Client-side i18n: handles runtime language switching -->

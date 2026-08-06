@@ -72,7 +72,7 @@ export const MODULES = [
     items: [
       'Product catalog with categories',
       'Batch & lot tracking with expiration alerts',
-      'Stock entries, exits, and transfers',
+      'Stock entries, exits, and custom movement types',
       'Multi-branch real-time stock levels',
       'Automated movement type classification',
       'Dashboard alerts: expired, low stock',
@@ -86,7 +86,7 @@ export const MODULES = [
       'Automatic sales-to-inventory linking',
       'Real-time accumulated amount tracking',
       'Closing difference calculation',
-      'Full session audit logs',
+      'Complete session records',
       'Tax-inclusive movement recording',
     ],
   },

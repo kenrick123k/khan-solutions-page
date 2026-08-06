@@ -1,0 +1,66 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+import TrustBadges from './TrustBadges.astro';
+
+interface Props {
+  variant: 'screenshots' | 'stats';
+}
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const { variant } = Astro.props;
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const keyPrefix = variant === 'screenshots' ? 'ctaAfterScreenshots' : 'ctaAfterStats';
+const cta = variant === 'screenshots' ? text.ctaAfterScreenshots : text.ctaAfterStats;
+---
+
+<section id={`cta-band-${variant}`} class="relative py-16 sm:py-24 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-khan-bg-secondary/50" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+  <div class="relative z-10 mx-auto max-w-3xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-5xl font-bold font-display mb-4">
+      <span class="text-khan-text" data-i18n={`${keyPrefix}.title`}>{cta.title}</span>{' '}
+      <span class="gradient-text" data-i18n={`${keyPrefix}.titleAccent`}>{cta.titleAccent}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed" data-i18n={`${keyPrefix}.subtitle`}>
+      {cta.subtitle}
+    </p>
+
+    <div class="reveal-section">
+      <a href="#contact" class="btn-primary text-base">
+        <span data-i18n={`${keyPrefix}.button`}>{cta.button}</span>
+        <Fragment set:html={Icons.arrowRight} />
+      </a>
+      <p class="mt-4 text-sm text-khan-text-muted" data-i18n={`${keyPrefix}.microcopy`}>
+        {cta.microcopy}
+      </p>
+    </div>
+
+    {variant === 'stats' && (
+      <div class="reveal-section mt-10">
+        <TrustBadges />
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // This script is bundled once per page even when the component renders
+  // twice — scope reveals to each band's own section only.
+  ['screenshots', 'stats'].forEach((variant) => {
+    document.querySelectorAll(`#cta-band-${variant} .reveal-section`).forEach((el) => {
+      gsap.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+    });
+  });
+</script>

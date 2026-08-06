@@ -1,0 +1,366 @@
+---
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const c = text.cookie;
+const policyHref = `${locale === 'en' ? '' : '/' + locale}/cookies/`;
+---
+
+<!--
+  VETEK Cookie Consent Banner — GDPR / ePrivacy (ePrivacy Directive) compliant.
+
+  CONSENT GATE (inline script below): runs synchronously while the document is
+  still parsing — before any bundled module script executes — and exposes
+  window.__vctkConsent. Third-party analytics/marketing scripts must be
+  registered through window.__vctkConsent.runWhen('analytics'|'marketing', fn)
+  and will NOT execute until the visitor grants that category. This guarantees
+  non-essential cookies are never loaded before consent.
+
+  Consent is stored in localStorage under 'vctk_cookie_consent' and re-requested
+  every 12 months (expired consent blocks non-essential categories again).
+  Closing the banner (X button or Escape key) counts as refusal — there is no
+  implicit consent. "Accept all" and "Reject all" carry identical visual weight.
+-->
+<script is:inline>
+  (function () {
+    var KEY = 'vctk_cookie_consent';
+    var REPROMPT_MS = 12 * 30 * 24 * 60 * 60 * 1000; // 12 months
+    var state = { necessary: true, analytics: false, marketing: false };
+    var savedAt = 0;
+    var hasRecord = false;
+    var listeners = [];
+    var queue = [];
+
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.categories) {
+          state = {
+            necessary: true,
+            analytics: parsed.categories.analytics === true,
+            marketing: parsed.categories.marketing === true,
+          };
+          savedAt = typeof parsed.ts === 'number' ? parsed.ts : Date.now();
+          hasRecord = true;
+        }
+      }
+    } catch (e) {}
+
+    // Stored consent older than 12 months is treated as expired: non-essential
+    // categories are blocked again until the visitor re-consents.
+    if (hasRecord && Date.now() - savedAt > REPROMPT_MS) {
+      state.analytics = false;
+      state.marketing = false;
+    }
+
+    function persist(source) {
+      try {
+        localStorage.setItem(
+          KEY,
+          JSON.stringify({
+            version: 1,
+            categories: { necessary: true, analytics: state.analytics, marketing: state.marketing },
+            ts: Date.now(),
+            source: source, // accept_all | reject_all | custom
+          })
+        );
+      } catch (e) {}
+      savedAt = Date.now();
+      hasRecord = true;
+      notify();
+      flush();
+    }
+
+    function notify() {
+      for (var i = 0; i < listeners.length; i++) {
+        try {
+          listeners[i]({ necessary: true, analytics: state.analytics, marketing: state.marketing });
+        } catch (e) {}
+      }
+    }
+
+    function flush() {
+      for (var i = queue.length - 1; i >= 0; i--) {
+        var item = queue[i];
+        if (item.category === 'necessary' || state[item.category]) {
+          try {
+            item.fn();
+          } catch (e) {}
+          queue.splice(i, 1);
+        }
+      }
+    }
+
+    window.__vctkConsent = {
+      getState: function () {
+        return { necessary: true, analytics: state.analytics, marketing: state.marketing };
+      },
+      isAllowed: function (cat) {
+        return cat === 'necessary' || state[cat] === true;
+      },
+      acceptAll: function () {
+        state.analytics = true;
+        state.marketing = true;
+        persist('accept_all');
+      },
+      rejectAll: function () {
+        state.analytics = false;
+        state.marketing = false;
+        persist('reject_all');
+      },
+      savePreferences: function (cats) {
+        state.analytics = !!(cats && cats.analytics);
+        state.marketing = !!(cats && cats.marketing);
+        persist('custom');
+      },
+      // Register a script that must only run after consent for a category.
+      runWhen: function (category, fn) {
+        queue.push({ category: category, fn: fn });
+        if (this.isAllowed(category)) flush();
+      },
+      onUpdate: function (fn) {
+        listeners.push(fn);
+        try {
+          fn({ necessary: true, analytics: state.analytics, marketing: state.marketing });
+        } catch (e) {}
+      },
+      shouldPrompt: function () {
+        return !hasRecord || Date.now() - savedAt > REPROMPT_MS;
+      },
+      showBanner: function () {},
+      hideBanner: function () {},
+    };
+  })();
+</script>
+
+<!-- Banner UI -->
+<div
+  id="vctk-cookie-banner"
+  class="fixed inset-x-0 bottom-0 z-[100] hidden px-4 pb-4 sm:px-6"
+  role="dialog"
+  aria-modal="false"
+  aria-live="polite"
+  aria-labelledby="vctk-cookie-title"
+>
+  <div class="mx-auto max-w-4xl animate-reveal-up card-glass rounded-2xl p-5 shadow-2xl shadow-black/50 sm:p-6">
+    <!-- Main bar -->
+    <div id="vctk-cookie-bar" class="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div class="min-w-0 flex-1">
+        <p id="vctk-cookie-title" class="font-display text-base font-semibold text-khan-text">
+          {c.banner.title}
+        </p>
+        <p class="mt-1 text-sm leading-relaxed text-khan-text-secondary">
+          {c.banner.message}{' '}
+          <a
+            href={policyHref}
+            class="whitespace-nowrap text-khan-accent underline underline-offset-2 transition-colors hover:text-khan-accent-light"
+          >
+            {c.policyLink}
+          </a>
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button type="button" data-action="accept-all" class="vctk-btn">{c.banner.acceptAll}</button>
+        <button type="button" data-action="reject-all" class="vctk-btn">{c.banner.rejectAll}</button>
+        <button
+          type="button"
+          data-action="open-panel"
+          class="rounded-full px-3 py-2 text-sm font-semibold text-khan-accent transition-colors hover:text-khan-accent-light"
+        >
+          {c.banner.customize}
+        </button>
+        <button
+          type="button"
+          data-action="close"
+          aria-label={c.banner.close}
+          class="ml-1 rounded-full p-2 text-khan-text-muted transition-colors hover:text-khan-text"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Preference panel -->
+    <div id="vctk-cookie-panel" class="hidden">
+      <div class="mt-5 border-t border-khan-border pt-5">
+        <p class="font-display text-base font-semibold text-khan-text">{c.panel.title}</p>
+        <p class="mt-1 text-sm leading-relaxed text-khan-text-secondary">{c.panel.message}</p>
+
+        <div class="mt-4 space-y-3">
+          <!-- Necessary (always on) -->
+          <div class="flex items-start justify-between gap-4 rounded-xl border border-khan-border bg-khan-bg-secondary/60 p-4">
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-khan-text">{c.categories.necessary.name}</p>
+              <p class="mt-1 text-xs leading-relaxed text-khan-text-muted">{c.categories.necessary.description}</p>
+            </div>
+            <span class="shrink-0 rounded-full border border-khan-border px-3 py-1 text-xs font-medium text-khan-text-muted">
+              {c.panel.alwaysOn}
+            </span>
+          </div>
+
+          <!-- Analytics -->
+          <div class="flex items-start justify-between gap-4 rounded-xl border border-khan-border bg-khan-bg-secondary/60 p-4">
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-khan-text">{c.categories.analytics.name}</p>
+              <p class="mt-1 text-xs leading-relaxed text-khan-text-muted">{c.categories.analytics.description}</p>
+            </div>
+            <label class="relative mt-0.5 inline-flex shrink-0 cursor-pointer items-center">
+              <input type="checkbox" data-category="analytics" class="peer sr-only" aria-label={c.categories.analytics.name} />
+              <span class="relative h-6 w-11 rounded-full border border-khan-border-strong bg-khan-bg-card-hover transition-colors duration-200 peer-checked:border-khan-accent peer-checked:bg-khan-accent peer-focus-visible:ring-2 peer-focus-visible:ring-khan-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-khan-bg-card after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-khan-text-muted after:transition-transform after:duration-200 peer-checked:after:translate-x-[20px] peer-checked:after:bg-white"></span>
+            </label>
+          </div>
+
+          <!-- Marketing -->
+          <div class="flex items-start justify-between gap-4 rounded-xl border border-khan-border bg-khan-bg-secondary/60 p-4">
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-khan-text">{c.categories.marketing.name}</p>
+              <p class="mt-1 text-xs leading-relaxed text-khan-text-muted">{c.categories.marketing.description}</p>
+            </div>
+            <label class="relative mt-0.5 inline-flex shrink-0 cursor-pointer items-center">
+              <input type="checkbox" data-category="marketing" class="peer sr-only" aria-label={c.categories.marketing.name} />
+              <span class="relative h-6 w-11 rounded-full border border-khan-border-strong bg-khan-bg-card-hover transition-colors duration-200 peer-checked:border-khan-accent peer-checked:bg-khan-accent peer-focus-visible:ring-2 peer-focus-visible:ring-khan-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-khan-bg-card after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-khan-text-muted after:transition-transform after:duration-200 peer-checked:after:translate-x-[20px] peer-checked:after:bg-white"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-2.5">
+          <button type="button" data-action="save" class="btn-primary text-sm !px-6 !py-2.5">{c.panel.save}</button>
+          <button type="button" data-action="back" class="text-sm font-semibold text-khan-text-muted transition-colors hover:text-khan-text">
+            {c.panel.back}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Banner interaction logic (bundled, runs after the inline gate) -->
+<script>
+  const banner = document.getElementById('vctk-cookie-banner')!;
+  const bar = document.getElementById('vctk-cookie-bar')!;
+  const panel = document.getElementById('vctk-cookie-panel')!;
+  const consent = (window as any).__vctkConsent;
+
+  function showBanner() {
+    banner.classList.remove('hidden');
+    // Replay the entrance animation every time the banner is shown.
+    banner.style.animation = 'none';
+    void banner.offsetHeight;
+    banner.style.animation = '';
+  }
+
+  function hideBanner() {
+    banner.classList.add('hidden');
+  }
+
+  function openPanel() {
+    bar.classList.add('hidden');
+    panel.classList.remove('hidden');
+    const state = consent.getState();
+    const analytics = panel.querySelector<HTMLInputElement>('input[data-category="analytics"]');
+    const marketing = panel.querySelector<HTMLInputElement>('input[data-category="marketing"]');
+    if (analytics) analytics.checked = state.analytics;
+    if (marketing) marketing.checked = state.marketing;
+  }
+
+  function closePanel() {
+    panel.classList.add('hidden');
+    bar.classList.remove('hidden');
+  }
+
+  // Public controls (used by the footer "Cookie settings" link).
+  consent.showBanner = showBanner;
+  consent.hideBanner = hideBanner;
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target instanceof Element)) return;
+    const btn = e.target.closest('[data-action]') as HTMLElement | null;
+    if (!btn) return;
+    switch (btn.dataset.action) {
+      case 'accept-all':
+        consent.acceptAll();
+        hideBanner();
+        break;
+      case 'reject-all':
+        consent.rejectAll();
+        hideBanner();
+        break;
+      case 'open-panel':
+        openPanel();
+        break;
+      case 'back':
+        closePanel();
+        break;
+      case 'close':
+        // Closing the banner counts as refusal — no implicit consent.
+        consent.rejectAll();
+        hideBanner();
+        break;
+      case 'save': {
+        const analytics = panel.querySelector<HTMLInputElement>('input[data-category="analytics"]')?.checked ?? false;
+        const marketing = panel.querySelector<HTMLInputElement>('input[data-category="marketing"]')?.checked ?? false;
+        consent.savePreferences({ analytics, marketing });
+        hideBanner();
+        break;
+      }
+    }
+  });
+
+  // Escape key also counts as refusal.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !banner.classList.contains('hidden')) {
+      consent.rejectAll();
+      hideBanner();
+    }
+  });
+
+  // Show only when consent is missing or older than 12 months.
+  if (consent.shouldPrompt()) showBanner();
+</script>
+
+<style>
+  /* "Accept all" and "Reject all" share this class — identical visual weight. */
+  .vctk-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1.5px solid rgba(79, 178, 134, 0.4);
+    background: rgba(79, 178, 134, 0.08);
+    color: #4fb286;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .vctk-btn:hover {
+    border-color: #4fb286;
+    background: rgba(79, 178, 134, 0.15);
+    box-shadow: 0 0 20px rgba(79, 178, 134, 0.15);
+  }
+  .vctk-btn:focus-visible {
+    outline: 2px solid #4fb286;
+    outline-offset: 2px;
+  }
+</style>

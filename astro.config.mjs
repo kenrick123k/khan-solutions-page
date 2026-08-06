@@ -35,7 +35,10 @@ export default defineConfig({
   server: {
     allowedHosts: ['khan-solutions.com'],
   },
-  trailingSlash: 'always',
+  // 'ignore' lets both /path and /path/ resolve, so unmatched URLs
+  // (with or without trailing slash) render the site's custom 404
+  // instead of Astro's default dev 404 page.
+  trailingSlash: 'ignore',
   build: {
     inlineStylesheets: 'auto',
   },

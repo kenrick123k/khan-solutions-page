@@ -114,6 +114,15 @@ body {
   background-clip: text;
 }
 
+/* Icon sizing helper: injected SVGs carry intrinsic width/height
+   attributes (e.g. width="24"). This forces them to fill a fixed-size
+   container so they never overflow their 16px wrapper or misalign
+   against adjacent text. */
+.icon-16 > svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 /* Card glass effect */
 .card-glass {
   background: rgba(13, 21, 34, 0.8);

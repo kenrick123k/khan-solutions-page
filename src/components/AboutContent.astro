@@ -1,0 +1,225 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const content = (text as any).about;
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
+const hero = content.hero;
+const mission = content.mission;
+const story = content.story;
+const values = content.values;
+const security = content.security;
+const bottomCta = content.bottomCta;
+
+/* Icon per value (order matches translations: Innovación, Seguridad, Experiencia, Accesibilidad) */
+const VALUE_ICONS = [
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/><path d="M8.5 11.5l2.5 2.5 4.5-4.5"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/><path d="M8.5 9.5h7M8.5 13h4"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 14h2M8 17h4"/></svg>',
+];
+
+/* Security items icon (order matches: AES, backups, SLA, isolation) */
+const SECURITY_ICONS = [
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 00-2-2H7a2 2 0 00-2 2v3"/><path d="M20.5 9h-17v11h17V9zM9 15.5v-3a3 3 0 016 0v3"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>',
+  '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+];
+
+const siteUrl = 'https://khan-solutions.com';
+const pageNames = { en: 'About Us', es: 'Sobre Nosotros', pt: 'Sobre Nós' };
+const pagePath = localPath('/about/');
+---
+
+<!-- BreadcrumbList + Organization Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + localPath('/') },
+    { '@type': 'ListItem', position: 2, name: pageNames[locale], item: siteUrl + pagePath },
+  ],
+})} />
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'KHAN Solutions',
+  url: siteUrl,
+  logo: `${siteUrl}/minimal-logo.svg`,
+  email: 'administration@khan-solutions.com',
+  description: 'KHAN Solutions builds VETEK, a veterinary practice management platform for multi-branch clinics: batch inventory, cash register, clinical records, and real-time analytics.',
+  foundingDate: '2024',
+  slogan: 'Digitalize veterinary practice management in Latin America with world-class technology.',
+  areaServed: { '@type': 'Continent', name: 'Latin America' },
+  knowsAbout: ['Veterinary practice management', 'Multi-branch inventory', 'Clinical records', 'Veterinary POS'],
+})} />
+
+<!-- Hero -->
+<section id="about-hero" class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-grid" />
+  <div class="glow-orb w-[500px] h-[500px] bg-khan-accent/6 -top-20 -right-40" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/5 bottom-10 left-0" />
+
+  <div class="relative z-10 mx-auto max-w-4xl text-center">
+    <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+      <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+      <span>{hero.badge}</span>
+    </div>
+
+    <h1 class="reveal-section text-4xl sm:text-6xl lg:text-6xl font-bold font-display leading-tight mb-6">
+      <span class="text-khan-text">{hero.title}</span>{' '}
+      <span class="gradient-text">{hero.titleAccent}</span>
+    </h1>
+
+    <p class="reveal-section text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto leading-relaxed">
+      {hero.subtitle}
+    </p>
+  </div>
+</section>
+
+<!-- Mission -->
+<section id="about-mission" class="relative py-16 sm:py-20 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/30" />
+  <div class="relative z-10 mx-auto max-w-4xl">
+    <div class="reveal-section card-glass rounded-3xl p-10 sm:p-14 text-center">
+      <p class="text-xs font-semibold uppercase tracking-wider text-khan-accent mb-4">
+        {mission.title} <span class="gradient-text">{mission.titleAccent}</span>
+      </p>
+      <p class="text-2xl sm:text-3xl font-display font-bold leading-snug text-khan-text">
+        {mission.text}
+      </p>
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {mission.points.map((p: string) => (
+          <div class="flex items-center gap-2.5 text-sm text-khan-text-secondary">
+            <span class="w-5 h-5 rounded-full bg-khan-accent/10 border border-khan-accent/20 flex items-center justify-center shrink-0 text-khan-accent">
+              <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span>{p}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Story -->
+<section id="about-story" class="relative py-16 sm:py-24 px-6">
+  <div class="relative z-10 mx-auto max-w-3xl">
+    <div class="reveal-section mb-10">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{story.title}</span>{' '}
+        <span class="gradient-text">{story.titleAccent}</span>
+      </h2>
+    </div>
+    <div class="space-y-6">
+      {story.paragraphs.map((p: string) => (
+        <p class="reveal-section text-lg text-khan-text-secondary leading-relaxed">{p}</p>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section id="about-values" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/30" />
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{values.title}</span>{' '}
+        <span class="gradient-text">{values.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-xl mx-auto">{values.subtitle}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {values.items.map((item: any, i: number) => (
+        <div class="value-card card-glass rounded-3xl p-7 flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent flex items-center justify-center mb-5" aria-hidden="true">
+            <Fragment set:html={VALUE_ICONS[i] || VALUE_ICONS[0]} />
+          </div>
+          <h3 class="text-lg font-bold font-display text-khan-text mb-3">{item.title}</h3>
+          <p class="text-sm text-khan-text-secondary leading-relaxed">{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Security / E-E-A-T -->
+<section id="about-security" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/40" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{security.title}</span>{' '}
+        <span class="gradient-text">{security.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-2xl mx-auto">{security.subtitle}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {security.items.map((item: any, i: number) => (
+        <div class="value-card card-glass rounded-3xl p-7">
+          <div class="w-12 h-12 rounded-2xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent flex items-center justify-center mb-5" aria-hidden="true">
+            <Fragment set:html={SECURITY_ICONS[i] || SECURITY_ICONS[0]} />
+          </div>
+          <h3 class="text-base font-bold font-display text-khan-text mb-3">{item.title}</h3>
+          <p class="text-sm text-khan-text-secondary leading-relaxed">{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section id="about-cta" class="relative py-20 sm:py-28 px-6">
+  <div class="relative z-10 mx-auto max-w-2xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+      <span class="text-khan-text">{bottomCta.title}</span>{' '}
+      <span class="gradient-text">{bottomCta.titleAccent}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary mb-8 max-w-xl mx-auto">
+      {bottomCta.subtitle}
+    </p>
+    <a href={`${localPath('/early-access/')}`} class="reveal-section btn-primary text-base px-10">
+      {bottomCta.button}
+      <Fragment set:html={Icons.arrowRight} />
+    </a>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 0.7, delay: (i % 6) * 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' },
+    });
+  });
+
+  gsap.utils.toArray('.value-card').forEach((card, i) => {
+    gsap.fromTo(card, { opacity: 0, y: 40 }, {
+      opacity: 1, y: 0, duration: 0.75, delay: (i % 4) * 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 95%' },
+    });
+  });
+</script>

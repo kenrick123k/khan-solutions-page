@@ -1,0 +1,251 @@
+---
+import { Icons } from '../lib/icons';
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const content = (text as any).comparison;
+
+function localPath(path: string) {
+  return locale === 'en' ? path : `/${locale}${path}`;
+}
+
+const hero = content.hero;
+const highlight = content.highlight;
+const matrix = content.matrix;
+const verdict = content.verdict;
+const bottomCta = content.bottomCta;
+
+/* Comparison matrix columns: VETEK always first and highlighted */
+const COLS = [
+  { key: 'vctk', label: matrix.colVctk, vctk: true },
+  { key: 'ezyvet', label: matrix.colEzy, vctk: false },
+  { key: 'avimark', label: matrix.colAvi, vctk: false },
+  { key: 'provet', label: matrix.colProvet, vctk: false },
+];
+
+/* Cell rendering: 'yes' / 'no' / 'partial' → icons, anything else → text */
+const CELL_ICONS: Record<string, string> = {
+  yes: '<svg class="w-5 h-5 mx-auto text-khan-accent" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  no: '<svg class="w-5 h-5 mx-auto text-khan-text-muted" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  partial: '<svg class="w-5 h-5 mx-auto text-khan-text-muted" viewBox="0 0 20 20" fill="none"><path d="M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+};
+
+const siteUrl = 'https://khan-solutions.com';
+const pageNames = { en: 'Compare', es: 'Comparar', pt: 'Comparar' };
+const pagePath = localPath('/comparison/');
+---
+
+<!-- BreadcrumbList Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + localPath('/') },
+    { '@type': 'ListItem', position: 2, name: pageNames[locale], item: siteUrl + pagePath },
+  ],
+})} />
+
+<!-- Hero -->
+<section id="comparison-hero" class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 overflow-hidden">
+  <div class="absolute inset-0 bg-grid" />
+  <div class="glow-orb w-[500px] h-[500px] bg-khan-accent/6 -top-20 -right-40" />
+  <div class="glow-orb w-[300px] h-[300px] bg-khan-accent-light/5 bottom-10 left-0" />
+
+  <div class="relative z-10 mx-auto max-w-4xl text-center">
+    <div class="reveal-section inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-khan-accent/20 bg-khan-accent/5 text-khan-accent text-sm font-medium mb-8">
+      <span class="w-2 h-2 rounded-full bg-khan-accent animate-glow-pulse" />
+      <span>{hero.badge}</span>
+    </div>
+
+    <h1 class="reveal-section text-4xl sm:text-6xl lg:text-6xl font-bold font-display leading-tight mb-6">
+      <span class="text-khan-text">{hero.title}</span>{' '}
+      <span class="gradient-text">{hero.titleAccent}</span>
+    </h1>
+
+    <p class="reveal-section text-lg sm:text-xl text-khan-text-secondary max-w-2xl mx-auto leading-relaxed">
+      {hero.subtitle}
+    </p>
+
+    <div class="reveal-section mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href={`${localPath('/early-access/')}`} class="btn-primary text-base px-8">
+        {hero.ctaPrimary}
+        <Fragment set:html={Icons.arrowRight} />
+      </a>
+      <a href={`${localPath('/features/')}`} class="btn-outline text-base px-8">
+        {hero.ctaSecondary}
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing Highlight Box -->
+<section id="comparison-highlight" class="relative py-16 sm:py-20 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/30" />
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section text-center mb-4">
+      <p class="text-xs font-semibold uppercase tracking-wider text-khan-accent mb-3">{highlight.label}</p>
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{highlight.title}</span>{' '}
+        <span class="gradient-text">{highlight.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-2xl mx-auto">{highlight.subtitle}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 mt-10">
+      {highlight.items.map((item: any) => (
+        <div class={`pricing-card card-glass rounded-3xl p-6 flex flex-col relative ${item.vctk ? 'border-khan-accent/50 shadow-[0_0_50px_rgba(79,178,134,0.15)]' : 'opacity-90'}`}>
+          {item.vctk && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap text-[11px] font-bold uppercase tracking-wider text-[#060910] bg-khan-accent rounded-full px-3 py-1 shadow-[0_0_20px_rgba(79,178,134,0.4)]">
+              VETEK
+            </div>
+          )}
+          <p class={`text-sm font-semibold font-display ${item.vctk ? 'text-khan-accent' : 'text-khan-text-secondary'}`}>{item.name}</p>
+          <div class="mt-3">
+            <span class={`text-3xl font-bold font-display leading-none ${item.vctk ? 'gradient-text' : 'text-khan-text'}`}>{item.price}</span>
+            <span class="text-base text-khan-text-muted">{item.unit}</span>
+          </div>
+          <p class="mt-3 text-xs text-khan-text-muted leading-relaxed flex-1">{item.detail}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="reveal-section mt-6 text-center text-xs text-khan-text-muted">{highlight.note}</p>
+  </div>
+</section>
+
+<!-- Comparison Matrix -->
+<section id="comparison-matrix" class="relative py-20 sm:py-24 px-6">
+  <div class="relative z-10 mx-auto max-w-7xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{matrix.title}</span>{' '}
+        <span class="gradient-text">{matrix.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-2xl mx-auto">{matrix.subtitle}</p>
+    </div>
+
+    <div class="reveal-section card-glass rounded-3xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="cmp-table w-full min-w-[900px] text-sm">
+          <thead>
+            <tr class="border-b border-khan-border">
+              <th scope="col" class="text-left px-6 py-5 font-semibold text-khan-text-secondary sticky left-0 z-30 bg-[#0d1522] min-w-[240px]">
+                {matrix.featureHeader}
+              </th>
+              {COLS.map((col) => (
+                <th scope="col" class={`px-5 py-5 text-center ${col.vctk ? 'bg-khan-accent/[0.07]' : ''}`}>
+                  <span class={`block font-display font-bold ${col.vctk ? 'text-khan-accent' : 'text-khan-text'}`}>{col.label}</span>
+                  {col.vctk && (
+                    <span class="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider text-[#060910] bg-khan-accent rounded-full px-2 py-0.5">{matrix.noteYes}</span>
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          {matrix.categories.map((cat: any) => (
+            <tbody>
+              <tr class="bg-khan-bg-secondary/80">
+                <th scope="rowgroup" colspan="5" class="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider text-khan-accent sticky left-0 z-20 bg-[#0a1019]">
+                  {cat.name}
+                </th>
+              </tr>
+              {cat.rows.map((row: any) => (
+                <tr class="border-t border-khan-border/40 transition-colors hover:bg-khan-bg-card/50">
+                  <td class="px-6 py-4 text-khan-text-secondary sticky left-0 z-10 bg-[#0d1522]">{row.label}</td>
+                  {COLS.map((col) => (
+                    <td class={`px-4 py-4 text-center ${col.vctk ? 'bg-khan-accent/[0.04]' : ''}`}>
+                      {(() => {
+                        const val = row[col.key];
+                        if (val === 'yes' || val === 'no' || val === 'partial') {
+                          return <Fragment set:html={CELL_ICONS[val]} />;
+                        }
+                        return <span class={`text-xs font-semibold ${col.vctk ? 'text-khan-accent' : 'text-khan-text-secondary'}`}>{val}</span>;
+                      })()}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </div>
+    </div>
+
+    <!-- Matrix legend -->
+    <div class="reveal-section mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-khan-text-muted">
+      <span class="flex items-center gap-2"><Fragment set:html={CELL_ICONS.yes} /><span>{matrix.noteYes}</span></span>
+      <span class="flex items-center gap-2"><Fragment set:html={CELL_ICONS.no} /><span>{matrix.noteNo}</span></span>
+      <span class="flex items-center gap-2"><Fragment set:html={CELL_ICONS.partial} /><span>{matrix.notePartial}</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- Verdict -->
+<section id="comparison-verdict" class="relative py-16 sm:py-24 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/40" />
+  <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+  <div class="relative z-10 mx-auto max-w-3xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-6">
+      <span class="text-khan-text">{verdict.title}</span>{' '}
+      <span class="gradient-text">{verdict.titleAccent}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary leading-relaxed mb-8">{verdict.text}</p>
+    <a href={`${localPath('/early-access/')}`} class="reveal-section btn-primary text-base px-10">
+      {verdict.button}
+      <Fragment set:html={Icons.arrowRight} />
+    </a>
+    <p class="reveal-section mt-4 text-sm text-khan-text-muted">{verdict.microcopy}</p>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section id="comparison-cta" class="relative py-20 sm:py-28 px-6">
+  <div class="relative z-10 mx-auto max-w-2xl text-center">
+    <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+      <span class="text-khan-text">{bottomCta.title}</span>
+    </h2>
+    <p class="reveal-section text-lg text-khan-text-secondary mb-8 max-w-xl mx-auto">
+      {bottomCta.subtitle}
+    </p>
+    <a href={`${localPath('/early-access/')}`} class="reveal-section btn-primary text-base px-10">
+      {bottomCta.button}
+      <Fragment set:html={Icons.arrowRight} />
+    </a>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.reveal-section').forEach((el, i) => {
+    gsap.fromTo(el, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 0.7, delay: (i % 6) * 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' },
+    });
+  });
+
+  gsap.utils.toArray('.pricing-card').forEach((card, i) => {
+    gsap.fromTo(card, { opacity: 0, y: 40 }, {
+      opacity: 1, y: 0, duration: 0.75, delay: i * 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 95%' },
+    });
+  });
+
+  /* Matrix rows staggered entrance */
+  gsap.utils.toArray('.cmp-table tbody tr:not(:first-child)').forEach((row, i) => {
+    gsap.fromTo(row, { opacity: 0, x: 16 }, {
+      opacity: 1, x: 0, duration: 0.45, delay: (i % 8) * 0.04, ease: 'power2.out',
+      scrollTrigger: { trigger: row, start: 'top 98%' },
+    });
+  });
+</script>

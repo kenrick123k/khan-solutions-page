@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const posts = (await getCollection('blog'))
   .filter(p => p.data.lang === 'en')
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const siteUrl = 'https://khan-solutions.com';
 ---
 
 <BaseLayout
@@ -13,6 +14,16 @@ const posts = (await getCollection('blog'))
   ogTitle="KHAN Solutions Blog — Veterinary Practice Insights"
   ogDescription="Expert guides on veterinary practice management, inventory software, clinical records, and clinic operations."
 >
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: siteUrl + '/blog/' },
+    ],
+  })} />
+
   <main class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 px-6 min-h-screen">
     <div class="absolute inset-0 bg-khan-bg-secondary/50" />
     <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 right-0" />

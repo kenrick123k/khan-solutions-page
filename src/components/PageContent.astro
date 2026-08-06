@@ -2,21 +2,45 @@
 import Nav from './Nav.astro';
 import Hero from './Hero.astro';
 import Features from './Features.astro';
+import TestimonialCard from './TestimonialCard.astro';
 import Modules from './Modules.astro';
-import Screenshots from './Screenshots.astro';
+import CtaBand from './CtaBand.astro';
 import Stats from './Stats.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
+import type { Locale } from '../i18n/index';
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const locale = detectLocale(Astro.url.pathname);
+const siteUrl = 'https://khan-solutions.com';
+const homePath = locale === 'en' ? '/' : `/${locale}/`;
 ---
+
+<!-- BreadcrumbList Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + homePath },
+  ],
+})} />
 
 <Nav />
 
 <main>
   <Hero />
   <Features />
+  <TestimonialCard index={0} />
   <Modules />
-  <Screenshots />
+  <TestimonialCard index={1} />
+  <CtaBand variant="screenshots" />
+  <TestimonialCard index={2} />
   <Stats />
+  <CtaBand variant="stats" />
   <Contact />
 </main>
 

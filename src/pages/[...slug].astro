@@ -1,0 +1,15 @@
+---
+// Catch-all route: renders the site's custom 404 page (same content as
+// 404.astro) for ANY unmatched URL, including in dev mode. Without this,
+// the dev server shows Astro's built-in default 404 page (with the Astro
+// logo) for URLs that don't match a route.
+import NotFound from './404.astro';
+
+export async function getStaticPaths() {
+  return [];
+}
+
+Astro.response.status = 404;
+---
+
+<NotFound />

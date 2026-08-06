@@ -3,7 +3,7 @@ import { t } from '../i18n/index';
 import type { Locale } from '../i18n/index';
 
 interface Props {
-  page: 'terms' | 'policy' | 'refunds';
+  page: 'terms' | 'policy' | 'refunds' | 'dpa' | 'aup' | 'cookies';
 }
 
 const { page } = Astro.props;
@@ -22,7 +22,14 @@ function localPath(path: string) {
 }
 
 const pagePath = localPath(`/${page}/`);
-const pageNames = { terms: { en: 'Terms of Service', es: 'Términos de Servicio', pt: 'Termos de Serviço' }, policy: { en: 'Privacy Policy', es: 'Política de Privacidad', pt: 'Política de Privacidade' }, refunds: { en: 'Refund Policy', es: 'Política de Reembolso', pt: 'Política de Reembolso' } };
+const pageNames = {
+  terms: { en: 'Terms of Service', es: 'Términos de Servicio', pt: 'Termos de Serviço' },
+  policy: { en: 'Privacy Policy', es: 'Política de Privacidad', pt: 'Política de Privacidade' },
+  refunds: { en: 'Refund Policy', es: 'Política de Reembolso', pt: 'Política de Reembolso' },
+  dpa: { en: 'Data Processing Agreement', es: 'Acuerdo de Procesamiento de Datos', pt: 'Acordo de Processamento de Dados' },
+  aup: { en: 'Acceptable Use Policy', es: 'Política de Uso Aceptable', pt: 'Política de Uso Aceitável' },
+  cookies: { en: 'Cookie Policy', es: 'Política de Cookies', pt: 'Política de Cookies' },
+};
 const pageName = pageNames[page][locale];
 
 function backLabel() {
@@ -69,7 +76,7 @@ function backLabel() {
 
     <!-- Content -->
     <div class="reveal-section card-glass rounded-2xl p-8 sm:p-10 space-y-8">
-      {content.sections.map((section: { heading: string; body: string }) => (
+      {content.sections.map((section: { heading: string; body: string; table?: { headers: string[]; rows: string[][] } }) => (
         <div>
           <h2 class="text-lg font-bold font-display text-khan-text mb-3">
             {section.heading}
@@ -77,6 +84,30 @@ function backLabel() {
           <p class="text-khan-text-secondary leading-relaxed">
             {section.body}
           </p>
+          {section.table && (
+            <div class="mt-4 overflow-x-auto rounded-xl border border-khan-border">
+              <table class="w-full min-w-[560px] text-sm">
+                <thead>
+                  <tr class="bg-khan-bg-secondary/70">
+                    {section.table.headers.map((header) => (
+                      <th class="px-4 py-3 text-left font-semibold text-khan-accent whitespace-nowrap">{header}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {section.table.rows.map((row) => (
+                    <tr class="border-t border-khan-border/60">
+                      {row.map((cell, i) => (
+                        <td class={`px-4 py-3 align-top text-khan-text-secondary ${i === 0 ? 'font-mono text-xs text-khan-text whitespace-nowrap' : ''}`}>
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       ))}
     </div>

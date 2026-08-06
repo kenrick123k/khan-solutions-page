@@ -47,6 +47,17 @@ const siteUrl = 'https://khan-solutions.com';
     })} />
   </Fragment>
 
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'KHAN Solutions', item: siteUrl + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: siteUrl + '/blog/' },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: siteUrl + `/blog/${postSlug}/` },
+    ],
+  })} />
+
   <main class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 px-6">
     <div class="absolute inset-0 bg-khan-bg-secondary/50" />
     <div class="glow-orb w-[400px] h-[400px] bg-khan-accent/5 top-0 right-0" />

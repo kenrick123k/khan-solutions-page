@@ -1,21 +1,57 @@
 # KHAN Solutions
-Veterinary practice management platform for multi-branch clinics. Inventory, clinical records, cash register, real-time analytics.
 
-## Product
-VETEK - All-in-one veterinary practice management software.
-Multi-branch inventory tracking, SOAP clinical records, point-of-sale with automatic inventory sync, real-time analytics dashboard, role-based access control, three-language support (English, Spanish, Portuguese).
+KHAN Solutions builds VETEK, an all-in-one veterinary practice management platform (SaaS) for single and multi-branch clinics. VETEK combines multi-branch inventory with batch tracking, a point of sale with tax snapshots, seven clinical record types, and real-time analytics in one multi-tenant platform.
+
+## About VETEK
+
+VETEK is veterinary practice management software for clinics with one or many branches. It runs in the browser and on mobile via a responsive PWA, with full interface and content support in English, Spanish, and Portuguese. Data for each clinic is fully isolated in a multi-tenant architecture, and clinical histories can be transferred between branches and clinics.
+
+## Key Facts
+
+- Product: VETEK — veterinary practice management platform
+- Company: KHAN Solutions, founded 2024, serving Latin America
+- Pricing: Premium plan $30 USD/month per clinic — every module and branch included
+- Languages: English, Spanish, Portuguese (full i18n)
+- Architecture: multi-tenant SaaS with isolated data per clinic
+- Platform: web-based PWA, works on desktop, tablet, and mobile
+- Rating: 4.8/5 based on 150 clinic user ratings
+- Support: email support with response within 24 hours; implementation training available
+- Trial: free evaluation period available for new clinics
+
+## Features
+
+- Multi-branch inventory: batch/lot tracking with manufacturing and expiration dates, auto-generated batch codes, inter-branch transfers, real-time stock levels, low-stock and expiry dashboard alarms
+- Cash register (POS): per-branch, per-shift sessions, batch-level product selection, automatic inventory deduction on sale, tax-inclusive movement recording, instant closing difference calculation, surplus/shortage detection, full audit trail
+- Clinical records: seven types (consultation, emergency, surgery, hospitalization, laboratory, vaccination, follow-up), SOAP format with anamnesis/diagnosis/treatment, emergency triage levels I–V, evidence file uploads, inter-clinic transfer of complete patient history
+- Real-time dashboard: WebSocket live synchronization across all branches
+- WhatsApp client verification
+- Role-based access control (RBAC) with granular permissions
+- Financial analytics: revenue, COGS, gross profit, margins, ROI, P&L with tax breakdowns
+- Multi-country tax compliance with time-bound rates and historical snapshots for audits
+- Security: encrypted authentication, AES-256 encryption, isolated tenant data, encrypted file storage
+- PWA: installable, responsive design for mobile access
+
+## Pricing
+
+VETEK Premium — $30 USD/month per clinic. One plan covers every module, every branch, and every feature with no per-module fees or hidden costs. Request a demo for onboarding and data migration assistance.
 
 ## Pages
+
 - Home: https://khan-solutions.com/
 - Pricing: https://khan-solutions.com/pricing/
+- Blog: https://khan-solutions.com/blog/
+- Blog — Veterinary Practice Management Software Guide: https://khan-solutions.com/blog/veterinary-practice-management-software-guide/
+- Blog — Veterinary Inventory Management Software: https://khan-solutions.com/blog/veterinary-inventory-management-software/
 - Terms of Service: https://khan-solutions.com/terms/
 - Privacy Policy: https://khan-solutions.com/policy/
 - Refund Policy: https://khan-solutions.com/refunds/
 
 ## Languages
+
 - English: https://khan-solutions.com/
 - Spanish: https://khan-solutions.com/es/
 - Portuguese: https://khan-solutions.com/pt/
 
 ## Contact
+
 Email: administration@khan-solutions.com

@@ -16,11 +16,32 @@ function localPath(path: string) {
   return locale === 'en' ? path : `/${locale}${path}`;
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  inventory: Icons.inventory,
-  pos: Icons.pos,
-  clinical: Icons.clinical,
-  security: Icons.security,
+const billing = content.billing;
+const tiers: any[] = content.tiers;
+const comparison = content.comparison;
+const faq = content.faq;
+const trust = content.trust;
+
+const defaultFaqItems = [
+  { q: 'Is there a free trial?', a: 'Yes. We offer an evaluation period so you can test VETEK with your clinic\'s real workflows before committing.' },
+  { q: 'Is there a minimum contract?', a: 'No. There is no lock-in period. Cancel whenever you want, with no penalty.' },
+  { q: 'Is my data secure?', a: 'Yes. AES-256 encryption, daily backups, and complete data isolation between clinics.' },
+];
+const faqItems = faq?.items?.length ? faq.items : defaultFaqItems;
+
+/* Icons for the comparison matrix: check / cross / dash */
+const CELL_ICONS: Record<string, string> = {
+  yes: '<svg class="w-5 h-5 mx-auto text-khan-accent" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  no: '<svg class="w-5 h-5 mx-auto text-khan-text-muted" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  partial: '<svg class="w-5 h-5 mx-auto text-khan-text-muted" viewBox="0 0 20 20" fill="none"><path d="M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+};
+
+/* Trust strip icons */
+const TRUST_ICONS = {
+  trial: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9.5h18M8 2v4M16 2v4M8 14h2M14 14h2M8 17.5h2"/></svg>',
+  cancel: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 4.5V10H15"/></svg>',
+  security: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/><path d="M8.5 11.5l2.5 2.5 4.5-4.5"/></svg>',
+  moneyBack: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.4 2.5 1.5-1 1.5-2.5 1.5-2.5.4-2.5 1.5 1 1.5 2.5 1.5 2.5-.4 2.5-1.5"/></svg>',
 };
 
 const siteUrl = 'https://khan-solutions.com';
@@ -60,122 +81,208 @@ const pricingPath = localPath('/pricing/');
   </div>
 </section>
 
-<!-- Premium Plan Card -->
-<section id="pricing-plan" class="relative py-8 px-6">
-  <div class="relative z-10 mx-auto max-w-3xl">
-    <div class="reveal-section card-glass rounded-3xl p-8 sm:p-12 border-khan-accent/30 shadow-[0_0_60px_rgba(79,178,134,0.08)]">
-      <!-- Plan Header -->
-      <div class="text-center mb-10">
-        <h2 class="text-2xl sm:text-3xl font-bold font-display text-khan-text mb-1">
-          {content.plan.name}
-        </h2>
-        <div class="flex items-baseline justify-center gap-1 mt-4">
-          <span class="text-5xl sm:text-6xl font-bold gradient-text font-display">
-            {content.plan.price}
-          </span>
-          <span class="text-khan-text-muted text-lg">{content.plan.period}</span>
-        </div>
-        <p class="text-khan-text-secondary mt-4 max-w-md mx-auto leading-relaxed">
-          {content.plan.description}
-        </p>
-        <a href={`${localPath('/')}#contact`} class="btn-primary mt-8 text-base px-10">
-          {content.plan.cta}
-          <Fragment set:html={Icons.arrowRight} />
-        </a>
+<!-- Billing toggle + Tier Cards -->
+<section id="pricing-plan" class="relative py-8 sm:py-12 px-6">
+  <div id="pricing-root" data-billing="annual" class="relative z-10 mx-auto max-w-7xl">
+    <div class="reveal-section flex flex-col items-center mb-12">
+      <div id="billing-toggle" role="group" aria-label={`${billing.monthly} / ${billing.annual}`} class="relative inline-flex p-1 rounded-full border border-khan-border-strong bg-khan-bg-card">
+        <span class="toggle-thumb absolute top-1 bottom-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-khan-accent" />
+        <button type="button" class="toggle-btn relative z-10 flex-1 whitespace-nowrap px-6 py-2.5 text-sm font-semibold rounded-full cursor-pointer" data-period="monthly" aria-pressed="false">
+          {billing.monthly}
+        </button>
+        <button type="button" class="toggle-btn relative z-10 flex-1 whitespace-nowrap px-6 py-2.5 text-sm font-semibold rounded-full cursor-pointer" data-period="annual" aria-pressed="true">
+          {billing.annual}
+        </button>
       </div>
+      <p id="billing-hint" class="mt-3 text-sm font-medium text-khan-accent" data-annual={billing.annualHint} data-monthly={billing.monthlyHint}>
+        {billing.annualHint}
+      </p>
+    </div>
 
-      <!-- Divider -->
-      <div class="border-t border-khan-border my-10" />
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+      {tiers.map((tier: any) => (
+        <div class={`pricing-card stagger-item card-glass rounded-3xl p-8 flex flex-col relative ${tier.badge ? 'lg:scale-[1.03] lg:-translate-y-3 border-khan-accent/40 shadow-[0_0_60px_rgba(79,178,134,0.12)] z-10' : ''}`}>
+          {tier.badge && (
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold uppercase tracking-wider text-[#060910] bg-khan-accent rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(79,178,134,0.4)]">
+              {tier.badge}
+            </div>
+          )}
 
-      <!-- Features Title -->
-      <div class="text-center mb-10">
-        <h3 class="text-xl sm:text-2xl font-bold font-display text-khan-text">
-          {content.plan.featuresTitle}
-        </h3>
-        <p class="text-khan-text-secondary mt-2">
-          {content.plan.featuresSubtitle}
-        </p>
-      </div>
+          <h2 class="text-xl font-bold font-display text-khan-text">{tier.name}</h2>
+          <p class="mt-1 text-sm font-medium text-khan-accent">{tier.audience}</p>
+          <p class="mt-3 text-sm text-khan-text-secondary leading-relaxed">{tier.description}</p>
 
-      <!-- Feature Categories -->
-      <div class="space-y-8">
-        {content.plan.categories.map((cat: any, i: number) => (
-          <div class="reveal-section card-glass rounded-2xl p-6 sm:p-8 transition-all duration-300 group">
-            <div class="flex items-start gap-4 mb-5">
-              <div class="w-12 h-12 rounded-xl bg-khan-accent/10 border border-khan-accent/20 flex items-center justify-center text-khan-accent shrink-0 group-hover:bg-khan-accent/15 group-hover:scale-110 transition-all duration-300">
-                <Fragment set:html={CATEGORY_ICONS[cat.icon] || Icons.check} />
+          <div class="mt-6 text-center">
+            <div class="price-swap">
+              <div data-period-price="annual">
+                <span class="text-5xl font-bold gradient-text font-display leading-none">${tier.annual}</span>
+                <span class="text-lg text-khan-text-muted">{billing.perMonth}</span>
               </div>
-              <div>
-                <h4 class="text-lg font-bold font-display text-khan-text group-hover:text-khan-accent-light transition-colors">
-                  {cat.title}
-                </h4>
-                <p class="text-sm text-khan-accent font-medium">
-                  {cat.subtitle}
-                </p>
+              <div data-period-price="monthly">
+                <span class="text-5xl font-bold gradient-text font-display leading-none">${tier.monthly}</span>
+                <span class="text-lg text-khan-text-muted">{billing.perMonth}</span>
               </div>
             </div>
-            <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
-              {cat.items.map((item: string) => (
-                <li class="flex items-start gap-2.5 text-khan-text-secondary text-sm">
-                  <svg class="w-4 h-4 mt-0.5 shrink-0 text-khan-accent" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                  </svg>
-                  <span>{item}</span>
+            <div class="note-swap mt-3">
+              <p data-note="annual" class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+                <s class="text-xl font-semibold text-khan-text-muted">${tier.monthly}</s>
+                <span class="text-xs font-bold text-[#060910] bg-khan-accent rounded-full px-2.5 py-1">{billing.saveBadge}</span>
+                <span class="w-full text-xs text-khan-text-muted">{billing.billedAnnually} — ${tier.annualTotal}{billing.perYear}</span>
+              </p>
+              <p data-note="monthly" class="text-xs text-khan-text-muted">{billing.billedMonthly}</p>
+            </div>
+          </div>
+
+          <a href={`${localPath('/')}#contact`} class={`${tier.badge ? 'btn-primary' : 'btn-outline'} mt-6 w-full justify-center text-base px-8`}>
+            {tier.cta}
+            <Fragment set:html={Icons.arrowRight} />
+          </a>
+
+          <div class="mt-8 pt-6 border-t border-khan-border flex-1">
+            <p class="text-xs font-semibold uppercase tracking-wider text-khan-text-muted mb-4">{tier.plusLabel}</p>
+            <ul class="space-y-3">
+              {tier.features.map((feature: string) => (
+                <li class="flex items-start gap-3 text-sm text-khan-text-secondary">
+                  <span class="mt-0.5 w-5 h-5 rounded-full bg-khan-accent/10 border border-khan-accent/20 flex items-center justify-center shrink-0 text-khan-accent">
+                    <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <span>{feature}</span>
                 </li>
               ))}
             </ul>
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ Section -->
-<section id="pricing-faq" class="relative py-20 sm:py-28 px-6">
-  <div class="absolute inset-0 bg-khan-bg/80" />
-  <div class="relative z-10 mx-auto max-w-3xl">
-    <div class="text-center mb-12">
-      <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
-        <span class="text-khan-text">{content.faq?.title || 'Frequently Asked'}</span>{' '}
-        <span class="gradient-text">{content.faq?.titleAccent || 'Questions'}</span>
-      </h2>
-      <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto">
-        {content.faq?.subtitle || 'Everything you need to know about VETEK Premium.'}
-      </p>
-    </div>
-    <div class="space-y-4">
-      {(content.faq?.items || [
-        { q: 'Is there a free trial?', a: 'Yes. We offer an evaluation period so you can test VETEK with your clinic\'s real workflows before committing.' },
-        { q: 'How does multi-branch pricing work?', a: 'Premium covers all your branches at one fixed price per clinic — no per-location surcharges.' },
-        { q: 'Can I transfer data from my current system?', a: 'Yes. We provide data migration assistance to bring your product catalog, client records, and clinical histories into VETEK.' },
-        { q: 'What support is included?', a: 'Premium includes email support with response within 24 hours. Implementation training is available for new clinics.' },
-        { q: 'Is my data secure?', a: 'Yes. Each clinic organization has fully isolated data with encrypted authentication, role-based access control, and complete audit trails.' },
-        { q: 'Does VETEK work on mobile?', a: 'Yes. The platform is responsive and works on desktop, tablet, and mobile browsers.' },
-        { q: 'Can clinical records transfer between branches?', a: 'Yes. Inter-branch clinical record transfer is built into Premium. Complete patient history follows the patient.' },
-        { q: 'What languages are supported?', a: 'VETEK supports English, Spanish, and Portuguese — with full UI and content translation across all three.' },
-      ]).map((item: { q: string; a: string }) => (
-        <div class="reveal-section card-glass rounded-2xl p-6 sm:p-8 transition-all duration-300">
-          <h3 class="text-lg font-bold font-display text-khan-text mb-3">{item.q}</h3>
-          <p class="text-khan-text-secondary leading-relaxed">{item.a}</p>
         </div>
       ))}
     </div>
   </div>
 </section>
 
-<!-- QAPage Structured Data -->
+<!-- Feature Comparison Table -->
+<section id="pricing-compare" class="relative py-20 sm:py-24 px-6">
+  <div class="absolute inset-0 bg-khan-bg-secondary/30" />
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{comparison.title}</span>{' '}
+        <span class="gradient-text">{comparison.titleAccent}</span>
+      </h2>
+      <p class="text-lg text-khan-text-secondary max-w-2xl mx-auto">{comparison.subtitle}</p>
+    </div>
+
+    <div class="reveal-section card-glass rounded-3xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="cmp-table w-full min-w-[760px] text-sm">
+          <thead>
+            <tr class="border-b border-khan-border">
+              <th scope="col" class="text-left px-6 py-5 font-semibold text-khan-text-secondary sticky left-0 z-30 bg-[#0d1522] min-w-[230px]">
+                {comparison.featureHeader}
+              </th>
+              {tiers.map((tier: any) => (
+                <th scope="col" class={`px-6 py-5 text-center ${tier.badge ? 'bg-khan-accent/[0.07]' : ''}`}>
+                  <span class={`block font-display font-bold ${tier.badge ? 'text-khan-accent' : 'text-khan-text'}`}>{tier.name}</span>
+                  {tier.badge && (
+                    <span class="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider text-[#060910] bg-khan-accent rounded-full px-2 py-0.5">{tier.badge}</span>
+                  )}
+                  <div class="cmp-price-swap price-swap mt-2 text-base" data-billing="annual">
+                    <span data-period-price="annual" class="font-semibold text-khan-text">${tier.annual}<span class="text-xs text-khan-text-muted">{billing.perMonth}</span></span>
+                    <span data-period-price="monthly" class="font-semibold text-khan-text">${tier.monthly}<span class="text-xs text-khan-text-muted">{billing.perMonth}</span></span>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          {comparison.categories.map((cat: any) => (
+            <tbody>
+              <tr class="bg-khan-bg-secondary/80">
+                <th scope="rowgroup" colspan="4" class="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider text-khan-accent sticky left-0 z-20 bg-[#0a1019]">
+                  {cat.name}
+                </th>
+              </tr>
+              {cat.rows.map((row: any) => (
+                <tr class="border-t border-khan-border/40 transition-colors hover:bg-khan-bg-card/50">
+                  <td class="px-6 py-4 text-khan-text-secondary sticky left-0 z-10 bg-[#0d1522]">{row.label}</td>
+                  {tiers.map((tier: any) => (
+                    <td class={`px-4 py-4 text-center ${tier.badge ? 'bg-khan-accent/[0.04]' : ''}`}>
+                      <Fragment set:html={CELL_ICONS[row[tier.id]] || CELL_ICONS.no} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust Elements -->
+<section id="pricing-trust" class="relative py-16 sm:py-20 px-6">
+  <div class="relative z-10 mx-auto max-w-6xl">
+    <div class="reveal-section grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {[
+        { icon: TRUST_ICONS.trial, text: trust.trial },
+        { icon: TRUST_ICONS.cancel, text: trust.cancel },
+        { icon: TRUST_ICONS.security, text: trust.security },
+        { icon: TRUST_ICONS.moneyBack, text: trust.moneyBack },
+      ].map((item) => (
+        <div class="card-glass rounded-2xl p-5 flex items-center gap-4">
+          <div class="w-11 h-11 rounded-xl bg-khan-accent/10 border border-khan-accent/20 text-khan-accent flex items-center justify-center shrink-0" aria-hidden="true">
+            <Fragment set:html={item.icon} />
+          </div>
+          <p class="text-sm text-khan-text-secondary leading-snug">{item.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Accordion -->
+<section id="pricing-faq" class="relative py-20 sm:py-28 px-6">
+  <div class="absolute inset-0 bg-khan-bg/80" />
+  <div class="relative z-10 mx-auto max-w-3xl">
+    <div class="text-center mb-12">
+      <h2 class="reveal-section text-3xl sm:text-4xl font-bold font-display mb-4">
+        <span class="text-khan-text">{faq.title}</span>{' '}
+        <span class="gradient-text">{faq.titleAccent}</span>
+      </h2>
+      <p class="reveal-section text-lg text-khan-text-secondary max-w-xl mx-auto">
+        {faq.subtitle}
+      </p>
+    </div>
+    <div class="space-y-4">
+      {faqItems.map((item: { q: string; a: string }, i: number) => (
+        <div class="reveal-section faq-item card-glass rounded-2xl overflow-hidden transition-all duration-300">
+          <button
+            type="button"
+            id={`faq-toggle-${i}`}
+            class="faq-toggle w-full flex items-center justify-between gap-4 p-6 text-left cursor-pointer"
+            aria-expanded="false"
+            aria-controls={`faq-panel-${i}`}
+          >
+            <span class="text-lg font-bold font-display text-khan-text">{item.q}</span>
+            <span class="faq-icon shrink-0 text-khan-text-muted"><Fragment set:html={Icons.chevronDown} /></span>
+          </button>
+          <div class="faq-panel" id={`faq-panel-${i}`} role="region" aria-labelledby={`faq-toggle-${i}`}>
+            <div class="faq-panel-inner px-6 pb-6">
+              <p class="text-khan-text-secondary leading-relaxed">{item.a}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- FAQPage Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify({
   '@context': 'https://schema.org',
-  '@type': 'QAPage',
-  mainEntity: {
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item: { q: string; a: string }) => ({
     '@type': 'Question',
-    name: (content.faq?.items || [{ q: 'Is there a free trial?', a: 'Yes.' }])[0].q,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: (content.faq?.items || [{ q: 'Is there a free trial?', a: 'Yes.' }])[0].a,
-    },
-  },
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
 })} />
 
 <!-- Bottom CTA -->
@@ -197,15 +304,128 @@ const pricingPath = localPath('/pricing/');
   </div>
 </section>
 
+<style>
+  /* ── Billing toggle ── */
+  .toggle-btn {
+    color: #94a3b8;
+    transition: color 0.3s ease;
+  }
+  .toggle-btn.active {
+    color: #060910;
+  }
+  #pricing-root[data-billing='annual'] .toggle-thumb {
+    transform: translateX(100%);
+  }
+
+  /* ── Price / note crossfade on toggle ── */
+  .price-swap,
+  .note-swap {
+    display: grid;
+  }
+  .price-swap [data-period-price],
+  .note-swap [data-note] {
+    grid-area: 1 / 1;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  #pricing-root[data-billing='annual'] [data-period-price='monthly'],
+  #pricing-root[data-billing='monthly'] [data-period-price='annual'],
+  #pricing-root[data-billing='annual'] [data-note='monthly'],
+  #pricing-root[data-billing='monthly'] [data-note='annual'] {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+  }
+
+  /* Comparison table header prices live outside #pricing-root, so they
+     carry their own billing state to avoid both prices overlapping */
+  .cmp-price-swap[data-billing='annual'] [data-period-price='monthly'],
+  .cmp-price-swap[data-billing='monthly'] [data-period-price='annual'] {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+  }
+
+  /* ── FAQ accordion ── */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq-panel-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .faq-item.open .faq-panel {
+    grid-template-rows: 1fr;
+  }
+  .faq-icon {
+    transition: transform 0.35s ease, color 0.35s ease;
+  }
+  .faq-item.open .faq-icon {
+    transform: rotate(180deg);
+    color: #4FB286;
+  }
+</style>
+
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
 
+  /* ── Billing toggle ── */
+  const root = document.getElementById('pricing-root');
+  const hint = document.getElementById('billing-hint');
+  const toggleBtns = root.querySelectorAll('.toggle-btn');
+
+  const cmpPriceSwaps = document.querySelectorAll('.cmp-price-swap');
+
+  toggleBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const period = btn.dataset.period;
+      if (root.dataset.billing === period) return;
+      root.dataset.billing = period;
+      cmpPriceSwaps.forEach((sw) => {
+        sw.dataset.billing = period;
+      });
+      toggleBtns.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+      hint.textContent = period === 'annual' ? hint.dataset.annual : hint.dataset.monthly;
+    });
+  });
+
+  /* ── FAQ accordion (one open at a time) ── */
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach((item) => {
+    const toggle = item.querySelector('.faq-toggle');
+    toggle.addEventListener('click', () => {
+      const willOpen = !item.classList.contains('open');
+      faqItems.forEach((other) => {
+        other.classList.remove('open');
+        other.querySelector('.faq-toggle').setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        item.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* ── GSAP scroll reveals ── */
   document.querySelectorAll('.reveal-section').forEach((el, i) => {
     gsap.fromTo(el, { opacity: 0, y: 30 }, {
-      opacity: 1, y: 0, duration: 0.7, delay: i * 0.1, ease: 'power3.out',
+      opacity: 1, y: 0, duration: 0.7, delay: (i % 6) * 0.08, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 92%' },
+    });
+  });
+
+  /* ── Stagger entrance for the three pricing cards ── */
+  gsap.utils.toArray('.pricing-card').forEach((card, i) => {
+    gsap.fromTo(card, { opacity: 0, y: 40 }, {
+      opacity: 1, y: 0, duration: 0.75, delay: i * 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 95%' },
     });
   });
 </script>

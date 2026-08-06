@@ -1,0 +1,61 @@
+---
+import { t } from '../i18n/index';
+import type { Locale } from '../i18n/index';
+
+interface Props {
+  index: 0 | 1 | 2;
+}
+
+function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/es/')) return 'es';
+  if (pathname.startsWith('/pt/')) return 'pt';
+  return 'en';
+}
+const { index } = Astro.props;
+const locale = detectLocale(Astro.url.pathname);
+const text = t(locale);
+const item = text.testimonials.items[index];
+---
+
+<section id={`testimonial-${index}`} class="relative py-10 sm:py-14 px-6">
+  <div class="mx-auto max-w-4xl">
+    <figure class="reveal-section card-glass rounded-2xl p-8 sm:p-10 relative overflow-hidden">
+      <div class="glow-orb w-[220px] h-[220px] bg-khan-accent/6 -top-24 -right-24 pointer-events-none" />
+
+      <div class="relative z-10 flex flex-col sm:flex-row sm:items-center gap-6">
+        <!-- Metric -->
+        <div class="shrink-0 sm:w-56 text-center sm:text-left sm:border-r sm:border-khan-border sm:pr-8">
+          <p class="text-2xl sm:text-3xl font-bold gradient-text font-display leading-tight" data-i18n={`testimonials.items.${index}.metric`}>
+            {item.metric}
+          </p>
+        </div>
+
+        <!-- Quote + attribution -->
+        <div>
+          <blockquote class="text-base sm:text-lg text-khan-text leading-relaxed mb-4">
+            <span class="text-khan-accent text-3xl leading-none align-top mr-1 select-none" aria-hidden="true">“</span>
+            <span data-i18n={`testimonials.items.${index}.quote`}>{item.quote}</span>
+          </blockquote>
+          <figcaption class="text-sm">
+            <strong class="text-khan-text font-semibold">{item.name}</strong>
+            <span class="text-khan-text-muted" data-i18n={`testimonials.items.${index}.role`}>{item.role}</span>
+          </figcaption>
+        </div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // This script is bundled once per page even when the component renders
+  // multiple times — scope reveals to this card's own section only.
+  [0, 1, 2].forEach((i) => {
+    document.querySelectorAll(`#testimonial-${i} .reveal-section`).forEach((el) => {
+      gsap.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+    });
+  });
+</script>

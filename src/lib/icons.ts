@@ -25,11 +25,18 @@ export const Icons = {
 
   pos: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="6" width="24" height="20" rx="3" stroke="currentColor" stroke-width="2"/><path d="M4 13h24" stroke="currentColor" stroke-width="2"/><rect x="16" y="16" width="8" height="6" rx="1" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="19" r="2" fill="currentColor"/><path d="M7 7l2-3M25 7l-2-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
 
-  analytics: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 28V16M12 28V12M20 28V18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M20 18l6-8 2 4v14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="28" r="0" fill="currentColor"/></svg>`,
+  analytics: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 28V16M12 28V12M20 28V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 18l6-8 2 4v14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 
   realtime: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="2"/><path d="M16 8v8l5.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 4l2-2M22 4l-2-2M4 10l-2-2M4 22l-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/></svg>`,
 
   security: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 3L5 7.5v9.5c0 8.5 5.5 16.5 11 18.5 5.5-2 11-10 11-18.5V7.5L16 3z" stroke="currentColor" stroke-width="2"/><path d="M10 16l4.5 4.5L22 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  // Trust badge icons
+  database: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5.5" rx="8" ry="3" stroke="currentColor" stroke-width="2"/><path d="M4 5.5v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="currentColor" stroke-width="2"/><path d="M4 11.5v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="currentColor" stroke-width="2"/></svg>`,
+
+  activity: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3-8 4 16 3-8h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  headset: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 14v-2a8 8 0 0116 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="3" y="13" width="4" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="17" y="13" width="4" height="7" rx="2" stroke="currentColor" stroke-width="2"/><path d="M20 20a3 3 0 01-3 3h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
 
   // Loading spinner
   spinner: `<svg class="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.25"/><path d="M12 2a10 10 0 019.95 9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
